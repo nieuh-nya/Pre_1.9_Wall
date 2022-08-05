@@ -1,3 +1,5 @@
+Mostly copy/pasted from Specnr and FinestPigeon
+
 How to setup:
 
 - put instanceNumber.txt in your .minecrafts
