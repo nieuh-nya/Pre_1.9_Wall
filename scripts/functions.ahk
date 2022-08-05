@@ -72,7 +72,8 @@ GetInstanceTotal() {
   loop, %all% {
     WinGet, pid, PID, % "ahk_id " all%A_Index%
     WinGetTitle, title, ahk_pid %pid%
-    if (InStr(title, "Minecraft 1.8.9")) {
+    titleFormat := "Minecraft " . version
+    if (InStr(title, titleFormat)) {
       rawPIDs[idx] := pid
       idle[idx] := True
       idx += 1
@@ -105,16 +106,23 @@ GetAllPIDs() {
   }
 }
 
+SetAffinity(pid, mask) {
+  hProc := DllCall("OpenProcess", "UInt", 0x0200, "Int", false, "UInt", pid, "Ptr")
+  DllCall("SetProcessAffinityMask", "Ptr", hProc, "Ptr", mask)
+  DllCall("CloseHandle", "Ptr", hProc)
+}
+
 SetTitles() {
   for i, pid in PIDs {
-    WinSetTitle, ahk_pid %pid%, , Minecraft 1.8.9 - Instance %i%
+    WinSetTitle, ahk_pid %pid%, , Minecraft %version% - Instance %i%
   }
 }
 
 GetActiveInstanceNum() {
   WinGet, pid, PID, A
   WinGetTitle, title, ahk_pid %pid%
-  if (InStr(title, "Minecraft 1.8.9 - Instance ")) {
+  titleFormat := "Minecraft " . version . " - Instance"
+  if (InStr(title, titleFormat)) {
     for i, tmppid in PIDs {
       if (tmppid == pid) {
         return i
@@ -141,7 +149,12 @@ ExitWorld() {
       WinMove, ahk_pid %pid%,,0,0,%A_ScreenWidth%,%newHeight%
     }
     ToWall()
-    ResetInstance(idx, True)
+    ResetInstance(idx)
+    if (affinity) {
+      for i, tmppid in PIDs {
+        SetAffinity(tmppid, highBitMask)
+      }
+    }
   }
 }
 
@@ -152,13 +165,17 @@ SwitchInstance(idx)
     FileDelete, %idleFile%
     locked[idx] := true
     pid := PIDs[idx]
-    if(switchToEasy) {
+    if (affinity) {
+      for i, tmppid in PIDs {
+        if (tmppid != pid){
+          SetAffinity(tmppid, lowBitMask)
+        }
+      }
+    }
+    if (switchToEasy) {
       SwitchToEasy(pid)
     }
-    if(renderDistanceOnJoin) {
-      ChangeRenderOnJoin(pid)
-    }
-    if(coop) {
+    if (coop) {
       OpenToLan(pid)
     }
     if (wideResets) {
@@ -166,8 +183,8 @@ SwitchInstance(idx)
     }
     WinActivate, ahk_pid %pid%
     WinMinimize, Fullscreen Projector
-    if(unpauseOnJoin && !coop) {
-      if(switchToEasy || renderDistanceOnJoin) {
+    if (unpauseOnJoin && !coop) {
+      if (switchToEasy) {
         sleep %guiDelay%
       }
       ControlSend, ahk_parent, {Blind}{Esc}, ahk_pid %pid%
@@ -179,14 +196,14 @@ SwitchInstance(idx)
   }
 }
 
-ResetInstance(idx, resetSettings := False) {
+ResetInstance(idx) {
   if (idx > 0 && idx <= instances && FileExist(GetIdleFile(idx))) {
     idleFile := GetIdleFile(idx)
     FileDelete, %idleFile%
     locked[idx] := false
     pid := PIDs[idx]
-    Run, %A_ScriptDir%\scripts\reset.ahk %pid% %resetSettings% %idleFile%
-    if(countAttempts) {
+    Run, %A_ScriptDir%\scripts\reset.ahk %pid% %idleFile%
+    if (countAttempts) {
       CountAttempts()
     }
   }
@@ -200,20 +217,10 @@ LockInstance(idx) {
 }
 
 FocusReset(focusInstance) {
-  if(fastFocusReset) {
-    loop, %instances% {
-      if (A_Index != focusInstance && !locked[A_Index]) {
-        ResetInstance(A_Index)
-      }
-    }
-    SwitchInstance(focusInstance)
-  }
-  else {
-    SwitchInstance(focusInstance)
-    loop, %instances% {
-      if (A_Index != focusInstance && !locked[A_Index]) {
-        ResetInstance(A_Index)
-      }
+  SwitchInstance(focusInstance)
+  loop, %instances% {
+    if (A_Index != focusInstance && !locked[A_Index]) {
+      ResetInstance(A_Index)
     }
   }
 }
@@ -240,34 +247,8 @@ SwitchToEasy(pid) {
   ControlSend, ahk_parent, {Blind}{Enter}, ahk_pid %pid%
 }
 
-ChangeRenderOnJoin(pid) {
-  if(switchToEasy) {
-    sleep %guiDelay%
-  }
-  ControlSend, ahk_parent, {Blind}{Tab 3}, ahk_pid %pid%
-  sleep, %settingsDelay%
-  ControlSend, ahk_parent, {Blind}{Enter}, ahk_pid %pid%
-  sleep %guiDelay%
-  ControlSend, ahk_parent, {Blind}{Tab 8}, ahk_pid %pid%
-  sleep, %settingsDelay%
-  ControlSend, ahk_parent, {Blind}{Enter}, ahk_pid %pid%
-  sleep %guiDelay%
-  ControlSend, ahk_parent, {Blind}{Tab 2}, ahk_pid %pid%
-  sleep %settingsDelay%
-  RDPresses := renderDistanceOnJoin - renderDistance
-  ControlSend, ahk_parent, {Blind}{Right %RDPresses%}, ahk_pid %pid%
-  sleep %settingsDelay%
-  ControlSend, ahk_parent, {Blind}{Tab 17}, ahk_pid %pid%
-  sleep, %settingsDelay%
-  ControlSend, ahk_parent, {Blind}{Enter}, ahk_pid %pid%
-  sleep %guiDelay%
-  ControlSend, ahk_parent, {Blind}{Tab 14}, ahk_pid %pid%
-  sleep, %settingsDelay%
-  ControlSend, ahk_parent, {Blind}{Enter}, ahk_pid %pid%
-}
-
 OpenToLan(pid) {
-  if(switchToEasy || renderDistanceOnJoin) {
+  if (switchToEasy) {
     sleep %guiDelay%
   }
   ControlSend, ahk_parent, {Blind}{Tab 4}, ahk_pid %pid%

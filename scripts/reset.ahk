@@ -23,48 +23,22 @@ getHwndForPid(pid) {
 }
 
 pid = %1%
-resetSettings = %2%
-idleFile = %3%
+idleFile = %2%
 
 ControlSend, ahk_parent, {Blind}{Enter}, ahk_pid %pid% ; close chat
 sleep, %settingsDelay%
-if(resetSettings && renderDistance) {
-	RDPresses := renderDistance - 2
-  ControlSend, ahk_parent, {Blind}{Esc}, ahk_pid %pid%
-  sleep, %guiDelay%
-  ControlSend, ahk_parent, {Blind}{Tab 3}, ahk_pid %pid%
-  sleep, %settingsDelay%
-  ControlSend, ahk_parent, {Blind}{Enter}, ahk_pid %pid%
-  sleep, %guiDelay%
-  ControlSend, ahk_parent, {Blind}{Tab 8}, ahk_pid %pid%
-  sleep, %settingsDelay%
-  ControlSend, ahk_parent, {Blind}{Enter}, ahk_pid %pid%
-  sleep, %guiDelay%
-  ControlSend, ahk_parent, {Blind}{Tab 2}, ahk_pid %pid%
-  sleep, %settingsDelay%
-  ControlSend, ahk_parent, {Blind}{Left 30}, ahk_pid %pid%
-  sleep, %settingsDelay%
-  ControlSend, ahk_parent, {Blind}{Right %RDPresses%}, ahk_pid %pid%
-  sleep, %settingsDelay%
-  ControlSend, ahk_parent, {Blind}{Tab 17}, ahk_pid %pid%
-  sleep, %settingsDelay%
-  ControlSend, ahk_parent, {Blind}{Enter}, ahk_pid %pid%
-  sleep, %guiDelay%
-  ControlSend, ahk_parent, {Blind}{Tab 14}, ahk_pid %pid%
-  sleep, %settingsDelay%
-  ControlSend, ahk_parent, {Blind}{Enter}, ahk_pid %pid%
-  sleep, %guiDelay%
-}
 
 if (%resetSounds%) {
   SoundPlay, A_ScriptDir\..\media\reset.wav
 }
 
-; reset whether paused or unpaused (only works if not resetting render)
-ControlSend, ahk_parent, {Blind}{Tab 7}{Enter}, ahk_pid %pid%
+TabPresses := anchiale ? 7 : 1
+
+; reset whether paused or unpaused
+ControlSend, ahk_parent, {Blind}{Tab %TabPresses%}{Enter}, ahk_pid %pid%
 ControlSend, ahk_parent, {Blind}{Esc}, ahk_pid %pid%
 sleep, %guiDelay%
-ControlSend, ahk_parent, {Blind}{Tab 7}{Enter}, ahk_pid %pid%
+ControlSend, ahk_parent, {Blind}{Tab %TabPresses%}{Enter}, ahk_pid %pid%
 
 ; check for loading screen
 while (True) {

@@ -15,6 +15,9 @@ global rawPIDs := []
 global PIDs := []
 global resetIdx := []
 global locked := []
+EnvGet, threadCount, NUMBER_OF_PROCESSORS
+global highBitMask := (2 ** threadCount) - 1
+global lowBitMask := (2 ** Ceil(threadCount * lowBitmaskMultiplier)) - 1
 
 GetAllPIDs()
 SetTitles()
@@ -35,6 +38,9 @@ for i, mcdir in McDirectories {
   }
   else {
     WinMaximize, ahk_pid %pid%
+  }
+  if (affinity) {
+    SetAffinity(pid, lowBitMask)
   }
   idleFile := mcdir . "idle.tmp"
   if (!FileExist(idleFile)) {
