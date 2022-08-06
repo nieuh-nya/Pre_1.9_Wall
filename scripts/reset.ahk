@@ -32,7 +32,7 @@ if (%resetSounds%) {
   SoundPlay, A_ScriptDir\..\media\reset.wav
 }
 
-TabPresses := anchiale ? 7 : 1
+TabPresses := 7 ; magically works for everything
 
 ; reset whether paused or unpaused
 ControlSend, ahk_parent, {Blind}{Tab %TabPresses%}{Enter}, ahk_pid %pid%
