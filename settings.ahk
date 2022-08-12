@@ -14,6 +14,9 @@ global resetSounds := True ; whether reset.wav plays whenever you reset
 global lockSounds := True ; whether lock.wav plays whenever you lock an instance
 global countAttempts := True ; counts your total and daily attempts
 global loadingScreenColor := 0x2E2117 ; color of the top left pixel of the loading screen, only change if you're using a texture pack
+global obsSceneControlType := "N" ; N = numpad hotkeys (up to 9 instances), F = function hotkeys f13-f24 (up to 12 instances), C = custom key array (too many instances)
+global obsWallSceneKey := "F12" ; hotkey to switch to your wall scene
+global obsCustomKeyArray := [] ; add keys in quotes separated by commas, the index in the array corresponds to the scene
 
 ; Extra inputs
 global switchToEasy := False ; switches difficulty to easy when you play a world

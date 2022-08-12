@@ -135,9 +135,9 @@ GetActiveInstanceNum() {
 ToWall() {
   WinMaximize, Fullscreen Projector
   WinActivate, Fullscreen Projector
-  send {F12 down}
+  send {%obsWallSceneKey% down}
   sleep, %obsDelay%
-  send {F12 up}
+  send {%obsWallSceneKey% up}
 }
 
 ExitWorld() {
@@ -190,9 +190,15 @@ SwitchInstance(idx)
       ControlSend, ahk_parent, {Blind}{Esc}, ahk_pid %pid%
     }
     FileAppend,, %idleFile%
-    send {Numpad%idx% down}
-    sleep, %obsDelay%
-    send {Numpad%idx% up}
+    if (obsSceneControlType == "N")
+      obsKey := "Numpad" . idx
+    else if (obsSceneControlType == "F")
+      obsKey := "F" . (idx+12)
+    else
+      obsKey := obsCustomKeyArray[idx]
+    Send {%obsKey% down}
+    Sleep, %obsDelay%
+    Send {%obsKey% up}
   }
 }
 
