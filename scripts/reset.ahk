@@ -43,14 +43,14 @@ ControlSend, ahk_parent, {Blind}{Tab %TabPresses%}{Enter}, ahk_pid %pid%
 ; check for loading screen
 while (True) {
   p := PixelColorSimple(0, 0, getHwndForPid(pid))
-  if(p == 0x2E2117) {
+  if(p == loadingScreenColor) {
     break
   }
 }
 ; check for ingame
 while (True) {
   p := PixelColorSimple(0, 0, getHwndForPid(pid))
-  if (p != 0x2E2117) {
+  if (p != loadingScreenColor) {
     break
   }
 }
@@ -58,7 +58,7 @@ sleep, 500
 ; second check in case title screen flashed
 while (True) {
   p := PixelColorSimple(0, 0, getHwndForPid(pid))
-  if (p != 0x2E2117) {
+  if (p != loadingScreenColor) {
     break
   }
 }

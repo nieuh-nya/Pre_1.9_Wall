@@ -14,6 +14,7 @@ global widthMultiplier := 2.5
 global resetSounds := True
 global lockSounds := True
 global countAttempts := True
+global loadingScreenColor := 0x2E2117 ; color of the top left pixel of the loading screen, only change if you're using a texture pack
 
 ; Extra inputs
 global switchToEasy := False
