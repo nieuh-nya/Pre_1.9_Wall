@@ -1,24 +1,23 @@
 ; General settings
-global version := "1.8.9"
-global anchiale := True
+global version := "1.8.9" ; your minecraft version
 global rows := 3 ; number of row on the wall scene
 global cols := 3 ; number of columns on the wall scene
 global lowBitmaskMultiplier := 0.75
 
 ; Extra features
-global disableTTS := False
+global disableTTS := False ; disables the "Ready" when running the macro
 global affinity := True
 global borderless := True ; automatically makes your instances borderless
-global wideResets := True
-global widthMultiplier := 2.5
-global resetSounds := True
-global lockSounds := True
-global countAttempts := True
+global wideResets := True ; stretches your instances when resetting for better visibility
+global widthMultiplier := 2.5 ; how wide you want your instances to be
+global resetSounds := True ; whether reset.wav plays whenever you reset
+global lockSounds := True ; whether lock.wav plays whenever you lock an instance
+global countAttempts := True ; counts your total and daily attempts
 global loadingScreenColor := 0x2E2117 ; color of the top left pixel of the loading screen, only change if you're using a texture pack
 
 ; Extra inputs
-global switchToEasy := False
-global unpauseOnJoin := True
+global switchToEasy := False ; switches difficulty to easy when you play a world
+global unpauseOnJoin := True ; presses ESC when you play a world
 global coop := False ; automatically opens to LAN
 
 ; Delays
