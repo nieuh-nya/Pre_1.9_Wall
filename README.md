@@ -6,8 +6,8 @@ How to setup:
 - press F3+P on all of your instances so they don't automatically pause after losing focus
 - window titles are different from macros for other versions, so configure your OBS scenes accordingly
 - you can use "Window title must match", so you don't have to reload scenes
-- uses Numpad + instanceNumber to switch to scenes
-- F12 for Wall-Scene
+- uses Numpad + instanceNumber to switch to scenes by default
+- F12 for Wall-Scene by default
 
 General things:
 
