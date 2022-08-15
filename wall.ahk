@@ -5,51 +5,116 @@
 
 SetKeyDelay, 0
 SetWinDelay, 1
-SetTitleMatchMode, 2
+SetTitleMatchMode, 1
 
-global instWidth := Floor(A_ScreenWidth / cols)
-global instHeight := Floor(A_ScreenHeight / rows)
-global McDirectories := []
-global instances := 0
-global rawPIDs := []
+global MSG_RESET := 0x0401
+global MSG_LOCK := 0x0402
+global MSG_PLAY := 0x0403
+global MSG_UPDATE_PID := 0x0404
+
+global instanceWidth := Floor(A_ScreenWidth / columns)
+global instanceHeight := Floor(A_ScreenHeight / rows)
+global totalInstances := 0
+
+global windowIDs := []
 global PIDs := []
-global resetIdx := []
-global locked := []
-EnvGet, threadCount, NUMBER_OF_PROCESSORS
-global highBitMask := (2 ** threadCount) - 1
-global lowBitMask := (2 ** Ceil(threadCount * lowBitmaskMultiplier)) - 1
+global minecraftDirectories := []
 
-GetAllPIDs()
-SetTitles()
 FileDelete, ATTEMPTS_DAY.txt
+SetupInstances()
 
-for i, mcdir in McDirectories {
-  pid := PIDs[i]
-  WinRestore, ahk_pid %pid%
-  if (borderless) {
-    WinSet, Style, -0xC00000, ahk_pid %pid%
-    WinSet, Style, -0x40000, ahk_pid %pid%
-    WinSet, ExStyle, -0x00000200, ahk_pid %pid%
-  }
-  if (wideResets) {
-    WinMove, ahk_pid %pid%,, 0, 0, %A_ScreenWidth%, %A_ScreenHeight%
-    newHeight := Floor(A_ScreenHeight / widthMultiplier)
-    WinMove, ahk_pid %pid%,, 0, 0, %A_ScreenWidth%, %newHeight%
-  }
-  else {
-    WinMaximize, ahk_pid %pid%
-  }
-  if (affinity) {
-    SetAffinity(pid, lowBitMask)
-  }
-  idleFile := mcdir . "idle.tmp"
-  if (!FileExist(idleFile)) {
-    FileAppend,, %idleFile%
-  }
+SetupInstances() {
+	titleFormat := "Minecraft " . version
+	WinGet, allInstances, list, %titleFormat%
+	loop, %all% {
+		windowID := allInstances%A_Index%
+		WinGet, PID, PID, ahk_id %windowID%
+		minecraftDirectory := GetMinecraftDirectory(PID)
+		instanceNumber := GetInstanceNumber(minecraftDirectory)
+		if (instanceNumber == -1) {
+			ExitApp
+		}
+		else if (PID == PIDs[instanceNumber] && windowID == windowIDs[instanceNumber]) {
+			continue
+		}
+		else {
+			windowIDs[instanceNumber] := windowID
+			PIDs[instanceNumber] := PID
+			MinecraftDirectories[instanceNumber] := minecraftDirectory
+			if (instanceManagerPID := InstanceManagerPIDs[instanceNumber]) {
+				PostMessage, MSG_UPDATE_PID, PID,,, ahk_pid %instanceManagerPID%
+			}
+			else {
+				Run, "%A_ScriptDir%\scripts\instance_manager.ahk" %instanceNumber% %windowID% %PID% %minecraftDirectory%
+			}
+		}
+	}
+	if (!disableTTS) {
+		ComObjCreate("SAPI.SpVoice").Speak("Ready")
+	}
 }
 
-if (!disableTTS) {
-  ComObjCreate("SAPI.SpVoice").Speak("Ready")
+LockInstance(instanceNumber) {
+	if (instanceNumber > 0 && instanceNumber <= totalInstances) {
+		instanceManagerPID := instanceManagerPIDs[instanceNumber]
+		PostMessage, MSG_LOCK,,, ahk_pid %instanceManagerPID%
+	}
+}
+
+PlayInstance(instanceNumber) {
+    if (instanceNumber > 0 && instanceNumber <= totalInstances) {
+        instanceManagerPID := instanceManagerPIDs[instanceNumber]
+        PostMessage, MSG_PLAY,,, ahk_pid %instanceManagerPID%
+    }
+}
+
+ResetInstance(instanceNumber, ignoreLock) {
+	if (instanceNumber > 0 && instanceNumber <= totalInstances) {
+		instanceManagerPID := instanceManagerPIDs[instanceNumber]
+		PostMessage, MSG_RESET, ignoreLock,, ahk_pid %instanceManagerPID%
+	}
+}
+
+ResetAll() {
+	Loop, %totalInstances% {
+		ResetInstance(A_Index, False)
+	}
+}
+
+FocusReset(focusInstance) {
+	PlayInstance(focusInstance)
+    Loop, %totalInstances% {
+        if(A_Index != focusInstance) {
+            ResetInstance(A_Index)
+        }
+    }
+}
+
+MousePosToInstanceNumber() {
+	MouseGetPos, mouseX, mouseY
+	return (Floor(mouseY / instanceHeight) * columns) + Floor(mouseX / instanceWidth) + 1
+}
+
+CountAttempts() {
+	FileRead, Attempt, ATTEMPTS.txt
+	if (ErrorLevel) {
+		Attempt := 0
+	}
+	else {
+		FileDelete, ATTEMPTS.txt
+	}
+	Attempt += 1
+	FileAppend, %Attempt%, ATTEMPTS.txt
+
+	FileRead, Attempt, ATTEMPTS_DAY.txt
+	if (ErrorLevel) {
+		Attempt = 0
+	} 
+	else {
+		FileDelete, ATTEMPTS_DAY.txt
+	}
+	Attempt += 1
+	FileAppend, %Attempt%, ATTEMPTS_DAY.txt
 }
 
 #Include hotkeys.ahk
