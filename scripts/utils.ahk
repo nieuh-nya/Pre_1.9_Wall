@@ -17,7 +17,7 @@ GetMinecraftDirectory(PID) {
 	}
 }
 
-GetInstanceNumberFromMinecraftDirectory(minecraftDirectory) {
+GetInstanceNumber(minecraftDirectory) {
 	instanceNumberFile := minecraftDirectory . "instanceNumber.txt"
 	instanceNumber := -1
 	if (!FileExist(instanceNumberFile)) {

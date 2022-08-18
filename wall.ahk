@@ -1,7 +1,7 @@
 #NoEnv
 #SingleInstance Force
-#Include %A_ScriptDir%\scripts\functions.ahk
-#Include settings.ahk
+#Include %A_ScriptDir%\scripts\utils.ahk
+#Include %A_ScriptDir%\settings.ahk
 
 SetKeyDelay, 0
 SetWinDelay, 1
@@ -18,15 +18,18 @@ global totalInstances := 0
 
 global windowIDs := []
 global PIDs := []
+global instanceManagerPIDs := []
 global minecraftDirectories := []
 
 FileDelete, ATTEMPTS_DAY.txt
+FileDelete, instance.txt
+FileDelete, log*.txt
 SetupInstances()
 
 SetupInstances() {
 	titleFormat := "Minecraft " . version
 	WinGet, allInstances, list, %titleFormat%
-	loop, %all% {
+	loop, %allInstances% {
 		windowID := allInstances%A_Index%
 		WinGet, PID, PID, ahk_id %windowID%
 		minecraftDirectory := GetMinecraftDirectory(PID)
@@ -41,14 +44,25 @@ SetupInstances() {
 			windowIDs[instanceNumber] := windowID
 			PIDs[instanceNumber] := PID
 			MinecraftDirectories[instanceNumber] := minecraftDirectory
-			if (instanceManagerPID := InstanceManagerPIDs[instanceNumber]) {
-				PostMessage, MSG_UPDATE_PID, PID,,, ahk_pid %instanceManagerPID%
+            FileAppend, Found valid instance %instanceNumber% with windowID = %windowID% and PID = %PID%`n, log.txt
+			if (tmpID := instanceManagerPIDs[instanceNumber]) {
+                DetectHiddenWindows, On
+				PostMessage, MSG_UPDATE_PID, PID,,, ahk_pid %tmpID%
+                DetectHiddenWindows, Off
+                FileAppend, Instance Manager already exists - sent MSG_UPDATE_PID`n, log.txt
 			}
 			else {
-				Run, "%A_ScriptDir%\scripts\instance_manager.ahk" %instanceNumber% %windowID% %PID% %minecraftDirectory%
+				Run, "%A_ScriptDir%\scripts\instance_manager.ahk" %instanceNumber% %windowID% %PID% %minecraftDirectory%,,, instanceManagerPID
+                DetectHiddenWindows, On
+                WinWait, ahk_pid %instanceManagerPID%
+                DetectHiddenWindows, Off
+                instanceManagerPIDs[instanceNumber] := instanceManagerPID
+                FileAppend, Started Instance Manager with PID = %instanceManagerPID%`n, log.txt
 			}
 		}
 	}
+    totalInstances := PIDs.MaxIndex()
+    FileAppend, Found %totalInstances% instances`n, log.txt
 	if (!disableTTS) {
 		ComObjCreate("SAPI.SpVoice").Speak("Ready")
 	}
@@ -57,21 +71,29 @@ SetupInstances() {
 LockInstance(instanceNumber) {
 	if (instanceNumber > 0 && instanceNumber <= totalInstances) {
 		instanceManagerPID := instanceManagerPIDs[instanceNumber]
-		PostMessage, MSG_LOCK,,, ahk_pid %instanceManagerPID%
+        DetectHiddenWindows, On
+		PostMessage, MSG_LOCK,,,, ahk_pid %instanceManagerPID%
+        DetectHiddenWindows, Off
 	}
 }
 
 PlayInstance(instanceNumber) {
     if (instanceNumber > 0 && instanceNumber <= totalInstances) {
         instanceManagerPID := instanceManagerPIDs[instanceNumber]
-        PostMessage, MSG_PLAY,,, ahk_pid %instanceManagerPID%
+        DetectHiddenWindows, On
+        PostMessage, MSG_PLAY,,,, ahk_pid %instanceManagerPID%
+        DetectHiddenWindows, Off
     }
 }
 
 ResetInstance(instanceNumber, ignoreLock) {
+    FileAppend, ResetInstance(%instanceNumber% %ignoreLock%)`n, log.txt
 	if (instanceNumber > 0 && instanceNumber <= totalInstances) {
 		instanceManagerPID := instanceManagerPIDs[instanceNumber]
-		PostMessage, MSG_RESET, ignoreLock,, ahk_pid %instanceManagerPID%
+        DetectHiddenWindows, On
+		PostMessage, MSG_RESET, ignoreLock,,, ahk_pid %instanceManagerPID%
+        DetectHiddenWindows, Off
+        FileAppend, Sent MSG_RESET with ignoreLock = %ignoreLock% to instance %instanceNumber% with instanceManagerPID %instanceManagerPID%`n, log.txt
 	}
 }
 
@@ -83,9 +105,10 @@ ResetAll() {
 
 FocusReset(focusInstance) {
 	PlayInstance(focusInstance)
+    Sleep, %focusResetDelay%
     Loop, %totalInstances% {
         if(A_Index != focusInstance) {
-            ResetInstance(A_Index)
+            ResetInstance(A_Index, False)
         }
     }
 }
@@ -93,6 +116,14 @@ FocusReset(focusInstance) {
 MousePosToInstanceNumber() {
 	MouseGetPos, mouseX, mouseY
 	return (Floor(mouseY / instanceHeight) * columns) + Floor(mouseX / instanceWidth) + 1
+}
+
+GetActiveInstanceNumber() {
+    FileRead, instanceNumber, instance.txt
+    if (ErrorLevel) {
+        return 0
+    }
+    return instanceNumber
 }
 
 CountAttempts() {
@@ -117,4 +148,23 @@ CountAttempts() {
 	FileAppend, %Attempt%, ATTEMPTS_DAY.txt
 }
 
-#Include hotkeys.ahk
+#Persistent
+OnExit("HandleExit")
+
+HandleExit(ExitReason) {
+    FileAppend, Exiting, log.txt
+    if ExitReason not in Logoff,Shutdown
+    {
+        DetectHiddenWindows, On
+        totalInstanceManagers := instanceManagerPIDs.MaxIndex()
+        FileAppend, Exiting and Closing %totalInstanceManagers% instanceManagers`n, log.txt
+        Loop, %totalInstanceManagers% {
+            instanceManagerPID := instanceManagerPIDs[A_Index]
+            WinClose, ahk_pid %instanceManagerPID%
+            FileAppend, Closed instanceManager%A_Index% with PID: %instanceManagerPID%`n, log.txt
+        }
+        DetectHiddenWindows, Off
+    }
+}
+
+#Include %A_ScriptDir%\hotkeys.ahk

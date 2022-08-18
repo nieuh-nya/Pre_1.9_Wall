@@ -24,8 +24,9 @@ global coop := False ; automatically opens to LAN
 ; Delays
 global beforePauseDelay := 300 ; increase if you get too many void spawns
 global obsDelay := 100 ; increase if not changing scenes in OBS
-global settingsDelay := 75 ; how long to wait between Tab-ing to an option and sending input to it
+global settingsDelay := 1000 ; how long to wait between Tab-ing to an option and sending input to it
 global guiDelay := 300 ; how long to wait after changing menus
 global pixelCheckDelay := 20 ; how long to wait between each pixel check
 global worldLoadDelay := 1000 ; minimum amount of time between loading screen and world load
 global titleScreenFlashDelay := 500 ; maximum amount of time the title screen will flash for before joining a world
+global focusResetDelay := 100 ; time between switching to an instance and resetting all the other ones
