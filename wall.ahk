@@ -22,7 +22,7 @@ global instanceManagerPIDs := []
 global minecraftDirectories := []
 
 FileDelete, ATTEMPTS_DAY.txt
-FileDelete, instance.txt
+FileDelete, activeInstance.txt
 FileDelete, log*.txt
 SetupInstances()
 
@@ -116,36 +116,6 @@ FocusReset(focusInstance) {
 MousePosToInstanceNumber() {
 	MouseGetPos, mouseX, mouseY
 	return (Floor(mouseY / instanceHeight) * columns) + Floor(mouseX / instanceWidth) + 1
-}
-
-GetActiveInstanceNumber() {
-    FileRead, instanceNumber, instance.txt
-    if (ErrorLevel) {
-        return 0
-    }
-    return instanceNumber
-}
-
-CountAttempts() {
-	FileRead, Attempt, ATTEMPTS.txt
-	if (ErrorLevel) {
-		Attempt := 0
-	}
-	else {
-		FileDelete, ATTEMPTS.txt
-	}
-	Attempt += 1
-	FileAppend, %Attempt%, ATTEMPTS.txt
-
-	FileRead, Attempt, ATTEMPTS_DAY.txt
-	if (ErrorLevel) {
-		Attempt = 0
-	} 
-	else {
-		FileDelete, ATTEMPTS_DAY.txt
-	}
-	Attempt += 1
-	FileAppend, %Attempt%, ATTEMPTS_DAY.txt
 }
 
 #Persistent

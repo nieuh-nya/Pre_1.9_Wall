@@ -29,6 +29,14 @@ GetInstanceNumber(minecraftDirectory) {
 	return instanceNumber
 }
 
+GetActiveInstanceNumber() {
+    FileRead, activeInstanceNumber, activeInstance.txt
+    if (ErrorLevel) {
+        return 0
+    }
+    return activeInstanceNumber
+}
+
 MakeWindowWide(windowID, widthMultiplier) {
 	newHeight := Floor(A_ScreenHeight / widthMultiplier)
 	WinRestore, ahk_id %windowID%
@@ -53,10 +61,8 @@ GetTopLeftPixelColor(windowID) {
 	return PixelColorSimple(0, 0, windowID)
 }
 
-SetAffinity(PID, mask) {
-	hProc := DllCall("OpenProcess", "UInt", 0x0200, "Int", false, "UInt", PID, "Ptr")
-	DllCall("SetProcessAffinityMask", "Ptr", hProc, "Ptr", mask)
-	DllCall("CloseHandle", "Ptr", hProc)
+GetBitMask(threadCount) {
+    return (2 ** threadCount) - 1
 }
 
 RunHide(command) {

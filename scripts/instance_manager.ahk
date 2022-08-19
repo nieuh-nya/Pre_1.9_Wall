@@ -14,6 +14,15 @@ global MSG_UPDATE_PID := 0x0404
 global locked := False
 global state := "idle" ; possible states: idle, resetting, preparingToPlay, playing
 
+EnvGet, totalThreads, NUMBER_OF_PROCESSORS
+global currentThreads := totalThreads
+global playThreads := playThreadsOverride > 0 ? playThreadsOverride : totalThreads
+global highThreads := highThreadsOverride > 0 ? highThreadsOverride : Max(Floor(totalThreads * 0.9), totalThreads - 4)
+global lockThreads := lockThreadsOverride > 0 ? lockThreadsOverride : highThreads
+global midThreads := midThreadsOverride > 0 ? midThreadsOverride : Ceil(totalThreads * 0.7)
+global lowThreads := lowThreadsOverride > 0 ? lowThreadsOverride : Ceil(totalThreads * 0.5)
+global superLowThreads := superLowThreadsOverride > 0 ? superLowThreadsOverride : Ceil(totalThreads * 0.2)
+
 global instanceNumber := A_Args[1]
 global windowID := A_Args[2]
 global PID := A_Args[3]
@@ -26,8 +35,30 @@ OnMessage(MSG_UPDATE_PID, "HandleUpdatePID", 1)
 
 SetupInstance()
 
+while (affinity) {
+    Sleep, %affinityCheckDelay%
+    if (state == "playing") {
+        continue
+    }
+    Critical, On
+    activeInstanceNumber := GetActiveInstanceNumber()
+    newThreads := 0
+    if (activeInstanceNumber && activeInstanceNumber != instanceNumber) {
+        newThreads := superLowThreads
+    }
+    else if (locked) {
+        newThreads := lockThreads
+    }
+    else {
+        newThreads := lowThreads
+    }
+    if (newThreads != currentThreads) {
+        SetAffinity(newThreads)
+    }
+    Critical, Off
+}
+
 SetupInstance() {
-    FileAppend, windowID = %windowID% in SetupInstance`n, log%instanceNumber%.txt
 	WinSetTitle, ahk_pid %PID%, , Minecraft %version% - Instance %instanceNumber%
 	WinRestore, ahk_pid %PID%
 	if (borderless) {
@@ -56,6 +87,13 @@ HandleReset(ignoreLock) {
 		oldState := state
 		state := "resetting"
 		Critical, Off
+        activeInstanceNumber := GetActiveInstanceNumber()
+        if (activeInstanceNumber && activeInstanceNumber != instanceNumber) {
+            SetAffinity(lowThreads)
+        }
+        else {
+            SetAffinity(highThreads)
+        }
         FileAppend, Valid reset with oldState = %oldState%`n, log%instanceNumber%.txt
         FileAppend, state = %state%`n, log%instanceNumber%.txt
         locked := false
@@ -69,7 +107,7 @@ HandleReset(ignoreLock) {
 			Send, {%obsWallSceneKey% down}
 			Sleep, %obsDelay%
 			Send, {%obsWallSceneKey% up}
-            FileDelete, %A_ScriptDir%\..\instance.txt
+            FileDelete, %A_ScriptDir%\..\activeInstance.txt
 		}
 
 		if (%resetSounds%) {
@@ -114,7 +152,34 @@ HandleReset(ignoreLock) {
 
 		Sleep, %beforePauseDelay%
 		ControlSend, ahk_parent, {Blind}{Esc}, ahk_pid %PID%
+
+        FileRead, Attempt, ATTEMPTS.txt
+        if (ErrorLevel) {
+            Attempt := 0
+        }
+        else {
+            FileDelete, ATTEMPTS.txt
+        }
+        Attempt += 1
+        FileAppend, %Attempt%, ATTEMPTS.txt
+
+        FileRead, Attempt, ATTEMPTS_DAY.txt
+        if (ErrorLevel) {
+            Attempt = 0
+        } 
+        else {
+            FileDelete, ATTEMPTS_DAY.txt
+        }
+        Attempt += 1
+        FileAppend, %Attempt%, ATTEMPTS_DAY.txt
+
 		state := "idle"
+        if (GetActiveInstanceNumber()) {
+            SetAffinity(superLowThreads)
+        }
+        else {
+            SetAffinity(lowThreads)
+        }
         FileAppend, Reset complete and state = %state%`n, log%instanceNumber%.txt
 	}
     else {
@@ -128,6 +193,12 @@ HandleLock() {
 	if (state == "idle") {
         FileAppend, state = %state% and locking instance`n, log%instanceNumber%.txt
 		locked := True
+        if (GetActiveInstanceNumber()) {
+            SetAffinity(superLowThreads)
+        }
+        else {
+            SetAffinity(lockThreads)
+        }
 		if (lockSounds) {
 			SoundPlay, A_ScriptDir\..\media\lock.wav
 		}
@@ -140,9 +211,11 @@ HandleLock() {
 HandlePlay() {
     FileAppend, HandlePlay()`n, log%instanceNumber%.txt
 	Critical, On
-	if (state == "idle") {
+	if (state == "idle" && !GetActiveInstanceNumber()) {
 		state := "preparingToPlay"
 		Critical, Off
+        SetAffinity(playThreads)
+        FileAppend, %instanceNumber%, A_ScriptDir\..\activeInstance.txt
         FileAppend, Switching to instance and state = %state%`n, log%instanceNumber%.txt
 		if (switchToEasy) {
 			ControlSend, ahk_parent, {Blind}{Tab 3}, ahk_pid %PID%
@@ -180,7 +253,6 @@ HandlePlay() {
 		Send, {%obsKey% down}
 		Sleep, %obsDelay%
 		Send, {%obsKey% up}
-        FileAppend, %instanceNumber%, A_ScriptDir\..\instance.txt
 		state := "playing"
         FileAppend, Done switching and state = %state%`n, log%instanceNumber%.txt
 	}
@@ -192,6 +264,14 @@ HandlePlay() {
 HandleUpdatePID(newPID) {
     FileAppend, HandleUpdatePID(%newPID%)`n, log%instanceNumber%.txt
 	WinGet, windowID, ID, ahk_pid %PID%
-    FileAppend, windowID = %windowID% in HandleUpdatePID`n, log%instanceNumber%.txt
 	SetupInstance()
+}
+
+SetAffinity(threadCount) {
+    bitMask := GetBitMask(threadCount)
+    hProc := DllCall("OpenProcess", "UInt", 0x0200, "Int", false, "UInt", PID, "Ptr")
+	DllCall("SetProcessAffinityMask", "Ptr", hProc, "Ptr", bitMask)
+	DllCall("CloseHandle", "Ptr", hProc)
+    currentThreads := threadCount
+    FileAppend, Set Affinity to %threadCount%`n, log%instanceNumber%.txt
 }
