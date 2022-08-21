@@ -43,6 +43,10 @@ MakeWindowWide(windowID, widthMultiplier) {
 	WinMove, ahk_id %windowID%,, 0, 0, %A_ScreenWidth%, %newHeight%
 }
 
+GetTopLeftPixelColor(windowID) {
+	return PixelColorSimple(0, 0, windowID)
+}
+
 PixelColorSimple(pc_x, pc_y, pc_wID) {
 	if (pc_wID) {
 		pc_hDC := DllCall("GetDC", "UInt", pc_wID)
@@ -55,10 +59,6 @@ PixelColorSimple(pc_x, pc_y, pc_wID) {
 		DllCall("ReleaseDC", "UInt", pc_wID, "UInt", pc_hDC)
 		return pc_c
 	}
-}
-
-GetTopLeftPixelColor(windowID) {
-	return PixelColorSimple(0, 0, windowID)
 }
 
 GetBitMask(threadCount) {
