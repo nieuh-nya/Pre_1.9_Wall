@@ -20,114 +20,115 @@ global windowIDs := []
 global PIDs := []
 global instanceManagerPIDs := []
 
-SendLog("Deleting temporary files")
 FileDelete, ATTEMPTS_SESSION.txt
 FileDelete, activeInstance.txt
 FileDelete, log*.txt
+
 if (countAttempts) {
-    FileAppend, 0, %A_ScriptDir%\ATTEMPTS_SESSION.txt
-    if (!FileExist("%A_ScriptDir%\ATTEMPTS.txt")) {
-        FileAppend, 0, %A_ScriptDir%\ATTEMPTS.txt
-    }
+	FileAppend, 0, ATTEMPTS_SESSION.txt
+	if (!FileExist("ATTEMPTS.txt")) {
+		FileAppend, 0, ATTEMPTS.txt
+	}
 }
+
 SetupInstances()
 
 SetupInstances() {
-    SendLog("Setting up instances")
-    Send, {%obsWallSceneKey% down}
+	SendLog("Setting up instances")
+
+	Send, {%obsWallSceneKey% down}
 	Sleep, %obsDelay%
 	Send, {%obsWallSceneKey% up}
+
 	titleFormat := "Minecraft " . version
 	WinGet, allInstances, list, %titleFormat%
-	loop, %allInstances% {
+	Loop, %allInstances% {
 		windowID := allInstances%A_Index%
 		WinGet, PID, PID, ahk_id %windowID%
 		minecraftDirectory := GetMinecraftDirectory(PID)
 		instanceNumber := GetInstanceNumber(minecraftDirectory)
 		if (!instanceNumber) {
-            SendLog("instanceNumber.txt not found for PID = {1} and windowID = {2}", PID, windowID)
+			SendLog(Format("instanceNumber.txt not found for PID = {1} and windowID = {2}", PID, windowID))
 			ExitApp
 		}
 		else if (PID == PIDs[instanceNumber] && windowID == windowIDs[instanceNumber]) {
-            SendLog(Format("Instance {1} is already managed correctly with PID = {2} and windowID = {3}", instanceNumber, PID, windowID))
+			SendLog(Format("Instance {1} is already managed correctly with PID = {2} and windowID = {3}", instanceNumber, PID, windowID))
 			continue
 		}
 		else {
 			windowIDs[instanceNumber] := windowID
 			PIDs[instanceNumber] := PID
-            SendLog(Format("Found instance {1} with PID = {2} and windowID = {3}", instanceNumber, PID, windowID))
+			SendLog(Format("Found instance {1} with PID = {2} and windowID = {3}", instanceNumber, PID, windowID))
 			if (instanceManagerPID := instanceManagerPIDs[instanceNumber]) {
-                DetectHiddenWindows, On
+				DetectHiddenWindows, On
 				PostMessage, MSG_UPDATE_PID, PID,,, ahk_pid %instanceManagerPID%
-                DetectHiddenWindows, Off
-                SendLog(Format("Sent MSG_UPDATE_PID to instanceManagerPID {1}", instanceManagerPID))
+				DetectHiddenWindows, Off
+				SendLog(Format("Sent MSG_UPDATE_PID to instanceManagerPID {1}", instanceManagerPID))
 			}
 			else {
 				Run, "%A_ScriptDir%\scripts\instance_manager.ahk" %instanceNumber% %windowID% %PID%,,, instanceManagerPID
-                DetectHiddenWindows, On
-                WinWait, ahk_pid %instanceManagerPID%
-                DetectHiddenWindows, Off
-                instanceManagerPIDs[instanceNumber] := instanceManagerPID
-                SendLog(Format("Started new instance manager with PID {1}", instanceManagerPID))
+				DetectHiddenWindows, On
+				WinWait, ahk_pid %instanceManagerPID%
+				DetectHiddenWindows, Off
+				instanceManagerPIDs[instanceNumber] := instanceManagerPID
+				SendLog(Format("Started new instance manager with PID {1}", instanceManagerPID))
 			}
 		}
 	}
-    totalInstances := PIDs.MaxIndex()
-    SendLog(Format("Found {1} total instances", totalInstances))
+	totalInstances := PIDs.MaxIndex()
+	SendLog(Format("Found {1} total instances", totalInstances))
+
 	if (!disableTTS) {
 		ComObjCreate("SAPI.SpVoice").Speak("Ready")
 	}
 }
 
 LockInstance(instanceNumber) {
-    SendLog(Format("Locking instance {1}", instanceNumber))
+	SendLog(Format("Locking instance {1}", instanceNumber))
 	if (instanceNumber > 0 && instanceNumber <= totalInstances) {
 		instanceManagerPID := instanceManagerPIDs[instanceNumber]
-        DetectHiddenWindows, On
+		DetectHiddenWindows, On
 		PostMessage, MSG_LOCK,,,, ahk_pid %instanceManagerPID%
-        DetectHiddenWindows, Off
-        SendLog(Format("Sent MSG_LOCK to instance {1} with instanceManagerPID {2}", instanceNumber, instanceManagerPID))
+		DetectHiddenWindows, Off
 	}
 }
 
 PlayInstance(instanceNumber) {
-    SendLog(Format("Playing instance {1}", instanceNumber))
-    if (instanceNumber > 0 && instanceNumber <= totalInstances) {
-        instanceManagerPID := instanceManagerPIDs[instanceNumber]
-        DetectHiddenWindows, On
-        PostMessage, MSG_PLAY,,,, ahk_pid %instanceManagerPID%
-        DetectHiddenWindows, Off
-        SendLog(Format("Sent MSG_PLAY to instance {1} with instanceManagerPID {2}", instanceNumber, instanceManagerPID))
-    }
+	SendLog(Format("Playing instance {1}", instanceNumber))
+	if (instanceNumber > 0 && instanceNumber <= totalInstances) {
+		instanceManagerPID := instanceManagerPIDs[instanceNumber]
+		DetectHiddenWindows, On
+		PostMessage, MSG_PLAY,,,, ahk_pid %instanceManagerPID%
+		DetectHiddenWindows, Off
+	}
 }
 
 ResetInstance(instanceNumber, ignoreLock) {
-    SendLog(Format("Resetting instance {1} with ignoreLock = {2}", instanceNumber, ignoreLock))
+	SendLog(Format("Resetting instance {1} with ignoreLock = {2}", instanceNumber, ignoreLock))
 	if (instanceNumber > 0 && instanceNumber <= totalInstances) {
 		instanceManagerPID := instanceManagerPIDs[instanceNumber]
-        DetectHiddenWindows, On
+		DetectHiddenWindows, On
 		PostMessage, MSG_RESET, ignoreLock,,, ahk_pid %instanceManagerPID%
-        DetectHiddenWindows, Off
-        SendLog(Format("Sent MSG_RESET with ignoreLock = {1} to instance {2} with instanceManagerPID {3}", ignoreLock, instanceNumber, instanceManagerPID))
+		DetectHiddenWindows, Off
 	}
 }
 
 ResetAll() {
-    SendLog("Resetting all instances")
+	SendLog("Resetting all instances")
 	Loop, %totalInstances% {
 		ResetInstance(A_Index, False)
 	}
 }
 
 FocusReset(focusInstance) {
-    SendLog(Format("Focus resetting with focusInstance = {1}", focusInstance))
+	SendLog(Format("Focus resetting with focusInstance = {1}", focusInstance))
 	PlayInstance(focusInstance)
-    Sleep, %focusResetDelay%
-    Loop, %totalInstances% {
-        if(A_Index != focusInstance) {
-            ResetInstance(A_Index, False)
-        }
-    }
+	Sleep, %focusResetDelay%
+	Loop, %totalInstances% {
+		if (A_Index != focusInstance) {
+			ResetInstance(A_Index, False)
+		}
+	}
 }
 
 MousePosToInstanceNumber() {
@@ -136,27 +137,27 @@ MousePosToInstanceNumber() {
 }
 
 SendLog(message) {
-    if (logging) {
-        FileAppend, [%A_TickCount%] [%A_YYYY-%A_MM%-%A_DD% %A_Hour%:%A_Min%:%A_Sec%] [WALL_MAIN] %message%`n, %A_ScriptDir%\log.txt
-    }
+	if (logging) {
+		FileAppend, [%A_TickCount%] [%A_YYYY%-%A_MM%-%A_DD% %A_Hour%:%A_Min%:%A_Sec%] [WALL_MAIN] %message%`n, %A_ScriptDir%\log.txt
+	}
 }
 
 #Persistent
 OnExit("HandleExit")
 
 HandleExit(ExitReason) {
-    SendLog("Exiting")
-    if ExitReason not in Logoff,Shutdown
-    {
-        DetectHiddenWindows, On
-        totalInstanceManagers := instanceManagerPIDs.MaxIndex()
-        Loop, %totalInstanceManagers% {
-            instanceManagerPID := instanceManagerPIDs[A_Index]
-            WinClose, ahk_pid %instanceManagerPID%
-            SendLog(Format("Closed instance manager for instance {1} with PID {2}", A_Index, instanceManagerPID))
-        }
-        DetectHiddenWindows, Off
-    }
+	SendLog("Exiting")
+	if ExitReason not in Logoff,Shutdown ; HOLY SHIT PLEASE LET ME PUT A CURLY BRACKET HERE
+	{
+		DetectHiddenWindows, On
+		totalInstanceManagers := instanceManagerPIDs.MaxIndex()
+		Loop, %totalInstanceManagers% {
+			instanceManagerPID := instanceManagerPIDs[A_Index]
+			WinClose, ahk_pid %instanceManagerPID%
+			SendLog(Format("Closed instance manager for instance {1} with PID {2}", A_Index, instanceManagerPID))
+		}
+		DetectHiddenWindows, Off
+	}
 }
 
 #Include %A_ScriptDir%\hotkeys.ahk

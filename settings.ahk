@@ -1,7 +1,8 @@
 ; General settings
 global version := "1.8.9" ; your minecraft version
-global rows := 3 ; number of row on the wall scene
+global rows := 3 ; number of rows on the wall scene
 global columns := 3 ; number of columns on the wall scene
+global logging := True
 
 ; Extra features
 global disableTTS := False ; disables the "Ready" when running the macro
@@ -24,9 +25,9 @@ global coop := False ; automatically opens to LAN
 ; Delays
 global beforePauseDelay := 300 ; increase if you get too many void spawns
 global obsDelay := 100 ; increase if not changing scenes in OBS
-global settingsDelay := 50 ; how long to wait between Tab-ing to an option and sending input to it
-global guiDelay := 300 ; how long to wait after changing menus
-global pixelCheckDelay := 100 ; how long to wait between each pixel check
+global settingsDelay := 50 ; increase if settings changes are inconsistent
+global guiDelay := 300 ; if resetting doesn't work, it's probably this
+global pixelCheckDelay := 100 ; saves on performance, slightly more variation before instance is paused
 global worldLoadDelay := 1000 ; minimum amount of time between loading screen and world join
 global titleScreenFlashDelay := 500 ; maximum amount of time the title screen will flash for before joining a world
 global focusResetDelay := 300 ; time between switching to an instance and resetting all the other ones
@@ -34,7 +35,7 @@ global focusResetDelay := 300 ; time between switching to an instance and resett
 ; Affinity
 global affinity := True ; manages the number of threads dedicated to your instances for better performance
 global affinityCheckDelay := 100 ; how regularly an instance's state is checked to update affinity
-; Thread count dedicated to...
+; Thread count dedicated to... (-1 for calculated defaults)
 global playThreadsOverride := -1 ; the instance you are playing
 global highThreadsOverride := -1 ; resetting instances while you are on wall
 global lockThreadsOverride := -1 ; locked instances while you are on wall

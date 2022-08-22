@@ -10,8 +10,8 @@ GetMinecraftDirectory(PID) {
 	else {
 		strStart := RegExMatch(rawOut, "P)(?:-Djava\.library\.path=(.+?) )|(?:\""-Djava\.library.path=(.+?)\"")", strLen, 1)
 		if (SubStr(rawOut, strStart+20, 1) == "=") {
-		strLen -= 1
-		strStart += 1
+			strLen -= 1
+			strStart += 1
 		}
 		return StrReplace(SubStr(rawOut, strStart+20, strLen-28) . ".minecraft\", "/", "\")
 	}
@@ -19,7 +19,7 @@ GetMinecraftDirectory(PID) {
 
 GetInstanceNumber(minecraftDirectory) {
 	instanceNumberFile := minecraftDirectory . "instanceNumber.txt"
-	instanceNumber := -1
+	instanceNumber := 0
 	if (!FileExist(instanceNumberFile)) {
 		MsgBox, Missing instanceNumber.txt in %minecraftDirectory%
 	}
@@ -30,11 +30,11 @@ GetInstanceNumber(minecraftDirectory) {
 }
 
 GetActiveInstanceNumber() {
-    FileRead, activeInstanceNumber, activeInstance.txt
-    if (ErrorLevel) {
-        return 0
-    }
-    return activeInstanceNumber
+	FileRead, activeInstanceNumber, activeInstance.txt
+	if (ErrorLevel) {
+		return 0
+	}
+	return activeInstanceNumber
 }
 
 MakeWindowWide(windowID, widthMultiplier) {
@@ -62,7 +62,7 @@ PixelColorSimple(pc_x, pc_y, pc_wID) {
 }
 
 GetBitMask(threadCount) {
-    return (2 ** threadCount) - 1
+	return (2 ** threadCount) - 1
 }
 
 RunHide(command) {
