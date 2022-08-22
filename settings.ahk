@@ -20,7 +20,6 @@ global obsCustomKeyArray := [] ; add keys in quotes separated by commas, the ind
 ; Extra inputs
 global switchToEasy := False ; switches difficulty to easy when you play a world
 global unpauseOnJoin := True ; presses ESC when you play a world
-global coop := False ; automatically opens to LAN
 
 ; Delays
 global beforePauseDelay := 300 ; increase if you get too many void spawns

@@ -1,0 +1,368 @@
+[13643718] [2022-08-22 21:45:32] [WALL_MAIN] Setting up instances
+[13644046] [2022-08-22 21:45:32] [WALL_MAIN] Found instance 1 with PID = 15108 and windowID = 0x50526
+[13644125] [2022-08-22 21:45:32] [WALL_MAIN] Started new instance manager with PID 21184
+[13644328] [2022-08-22 21:45:32] [INSTANCE-1] Set state to idle
+[13644328] [2022-08-22 21:45:32] [INSTANCE-1] Done setting up instance
+[13644328] [2022-08-22 21:45:32] [WALL_MAIN] Found instance 6 with PID = 23004 and windowID = 0x1a0258
+[13644375] [2022-08-22 21:45:32] [WALL_MAIN] Started new instance manager with PID 20440
+[13644437] [2022-08-22 21:45:32] [INSTANCE-1] Set affinity to 12
+[13644578] [2022-08-22 21:45:33] [WALL_MAIN] Found instance 4 with PID = 14940 and windowID = 0x80750
+[13644593] [2022-08-22 21:45:33] [INSTANCE-6] Set state to idle
+[13644593] [2022-08-22 21:45:33] [INSTANCE-6] Done setting up instance
+[13644625] [2022-08-22 21:45:33] [WALL_MAIN] Started new instance manager with PID 19012
+[13644703] [2022-08-22 21:45:33] [INSTANCE-6] Set affinity to 12
+[13644843] [2022-08-22 21:45:33] [INSTANCE-4] Set state to idle
+[13644843] [2022-08-22 21:45:33] [INSTANCE-4] Done setting up instance
+[13644843] [2022-08-22 21:45:33] [WALL_MAIN] Found instance 8 with PID = 18040 and windowID = 0x1305d6
+[13644890] [2022-08-22 21:45:33] [WALL_MAIN] Started new instance manager with PID 19544
+[13644953] [2022-08-22 21:45:33] [INSTANCE-4] Set affinity to 12
+[13645093] [2022-08-22 21:45:33] [WALL_MAIN] Found instance 5 with PID = 20288 and windowID = 0x30682
+[13645140] [2022-08-22 21:45:33] [WALL_MAIN] Started new instance manager with PID 21544
+[13645140] [2022-08-22 21:45:33] [INSTANCE-8] Done setting up instance
+[13645250] [2022-08-22 21:45:33] [INSTANCE-8] Set affinity to 12
+[13645359] [2022-08-22 21:45:33] [WALL_MAIN] Found instance 3 with PID = 16644 and windowID = 0x1704bc
+[13645375] [2022-08-22 21:45:33] [INSTANCE-5] Set state to idle
+[13645375] [2022-08-22 21:45:33] [INSTANCE-5] Done setting up instance
+[13645406] [2022-08-22 21:45:33] [WALL_MAIN] Started new instance manager with PID 22596
+[13645484] [2022-08-22 21:45:33] [INSTANCE-5] Set affinity to 12
+[13645593] [2022-08-22 21:45:34] [INSTANCE-3] Set state to idle
+[13645593] [2022-08-22 21:45:34] [INSTANCE-3] Done setting up instance
+[13645609] [2022-08-22 21:45:34] [WALL_MAIN] Found instance 2 with PID = 2316 and windowID = 0x30522
+[13645656] [2022-08-22 21:45:34] [WALL_MAIN] Started new instance manager with PID 18148
+[13645703] [2022-08-22 21:45:34] [INSTANCE-3] Set affinity to 12
+[13645890] [2022-08-22 21:45:34] [INSTANCE-2] Set state to idle
+[13645890] [2022-08-22 21:45:34] [WALL_MAIN] Found instance 7 with PID = 18264 and windowID = 0x2507fa
+[13645937] [2022-08-22 21:45:34] [WALL_MAIN] Started new instance manager with PID 24112
+[13646000] [2022-08-22 21:45:34] [INSTANCE-2] Set affinity to 12
+[13646140] [2022-08-22 21:45:34] [INSTANCE-7] Set state to idle
+[13646140] [2022-08-22 21:45:34] [INSTANCE-7] Done setting up instance
+[13646156] [2022-08-22 21:45:34] [WALL_MAIN] Found instance 9 with PID = 20852 and windowID = 0x1a08b4
+[13646203] [2022-08-22 21:45:34] [WALL_MAIN] Started new instance manager with PID 8060
+[13646203] [2022-08-22 21:45:34] [WALL_MAIN] Found 9 total instances
+[13646250] [2022-08-22 21:45:34] [INSTANCE-7] Set affinity to 12
+[13646437] [2022-08-22 21:45:34] [INSTANCE-9] Set state to idle
+[13646437] [2022-08-22 21:45:34] [INSTANCE-9] Done setting up instance
+[13646546] [2022-08-22 21:45:34] [INSTANCE-9] Set affinity to 12
+[13648968] [2022-08-22 21:45:37] [WALL_MAIN] Playing instance 6
+[13648968] [2022-08-22 21:45:37] [INSTANCE-6] Set state to preparingToPlay
+[13648968] [2022-08-22 21:45:37] [INSTANCE-6] Set affinity to 24
+[13648984] [2022-08-22 21:45:37] [INSTANCE-5] Set affinity to 5
+[13649000] [2022-08-22 21:45:37] [INSTANCE-4] Set affinity to 5
+[13649031] [2022-08-22 21:45:37] [INSTANCE-1] Set affinity to 5
+[13649062] [2022-08-22 21:45:37] [INSTANCE-9] Set affinity to 5
+[13649078] [2022-08-22 21:45:37] [INSTANCE-8] Set affinity to 5
+[13649437] [2022-08-22 21:45:37] [INSTANCE-6] Set state to playing
+[13653578] [2022-08-22 21:45:41] [WALL_MAIN] Resetting instance 6 with ignoreLock = 1
+[13653578] [2022-08-22 21:45:41] [INSTANCE-6] Set state to resetting
+[13653578] [2022-08-22 21:45:41] [INSTANCE-6] Reset is valid with oldState = playing
+[13653578] [2022-08-22 21:45:41] [INSTANCE-6] Set affinity to 21
+[13653796] [2022-08-22 21:45:42] [INSTANCE-7] Set affinity to 12
+[13653812] [2022-08-22 21:45:42] [INSTANCE-4] Set affinity to 12
+[13653843] [2022-08-22 21:45:42] [INSTANCE-1] Set affinity to 12
+[13653875] [2022-08-22 21:45:42] [INSTANCE-2] Set affinity to 12
+[13654593] [2022-08-22 21:45:43] [WALL_MAIN] Playing instance 1
+[13654593] [2022-08-22 21:45:43] [INSTANCE-1] Set state to preparingToPlay
+[13654593] [2022-08-22 21:45:43] [INSTANCE-1] Set affinity to 24
+[13654640] [2022-08-22 21:45:43] [INSTANCE-9] Set affinity to 5
+[13654671] [2022-08-22 21:45:43] [INSTANCE-5] Set affinity to 5
+[13654671] [2022-08-22 21:45:43] [INSTANCE-3] Set affinity to 5
+[13654687] [2022-08-22 21:45:43] [INSTANCE-4] Set affinity to 5
+[13655046] [2022-08-22 21:45:43] [INSTANCE-1] Set state to playing
+[13658234] [2022-08-22 21:45:46] [INSTANCE-6] Set state to idle
+[13658250] [2022-08-22 21:45:46] [INSTANCE-6] Set affinity to 5
+[13658781] [2022-08-22 21:45:47] [WALL_MAIN] Resetting instance 1 with ignoreLock = 1
+[13658781] [2022-08-22 21:45:47] [INSTANCE-1] Set state to resetting
+[13658796] [2022-08-22 21:45:47] [INSTANCE-1] Reset is valid with oldState = playing
+[13658796] [2022-08-22 21:45:47] [INSTANCE-1] Set affinity to 21
+[13659015] [2022-08-22 21:45:47] [INSTANCE-9] Set affinity to 12
+[13659078] [2022-08-22 21:45:47] [INSTANCE-4] Set affinity to 12
+[13659859] [2022-08-22 21:45:48] [WALL_MAIN] Playing instance 2
+[13659890] [2022-08-22 21:45:48] [INSTANCE-2] Set state to preparingToPlay
+[13659890] [2022-08-22 21:45:48] [INSTANCE-2] Set affinity to 24
+[13659953] [2022-08-22 21:45:48] [INSTANCE-4] Set affinity to 5
+[13659953] [2022-08-22 21:45:48] [INSTANCE-8] Set affinity to 5
+[13660000] [2022-08-22 21:45:48] [INSTANCE-9] Set affinity to 5
+[13660390] [2022-08-22 21:45:48] [INSTANCE-2] Set state to playing
+[13663328] [2022-08-22 21:45:51] [INSTANCE-1] Set state to idle
+[13663343] [2022-08-22 21:45:51] [INSTANCE-1] Set affinity to 5
+[13665031] [2022-08-22 21:45:53] [WALL_MAIN] Resetting instance 2 with ignoreLock = 1
+[13665031] [2022-08-22 21:45:53] [INSTANCE-2] Set state to resetting
+[13665031] [2022-08-22 21:45:53] [INSTANCE-2] Reset is valid with oldState = playing
+[13665046] [2022-08-22 21:45:53] [INSTANCE-2] Set affinity to 21
+[13665250] [2022-08-22 21:45:53] [INSTANCE-9] Set affinity to 12
+[13665312] [2022-08-22 21:45:53] [INSTANCE-5] Set affinity to 12
+[13665312] [2022-08-22 21:45:53] [INSTANCE-1] Set affinity to 12
+[13665328] [2022-08-22 21:45:53] [INSTANCE-8] Set affinity to 12
+[13666062] [2022-08-22 21:45:54] [WALL_MAIN] Playing instance 7
+[13666062] [2022-08-22 21:45:54] [INSTANCE-7] Set state to preparingToPlay
+[13666078] [2022-08-22 21:45:54] [INSTANCE-7] Set affinity to 24
+[13666093] [2022-08-22 21:45:54] [INSTANCE-8] Set affinity to 5
+[13666093] [2022-08-22 21:45:54] [INSTANCE-4] Set affinity to 5
+[13666125] [2022-08-22 21:45:54] [INSTANCE-9] Set affinity to 5
+[13666531] [2022-08-22 21:45:54] [INSTANCE-7] Set state to playing
+[13669156] [2022-08-22 21:45:57] [INSTANCE-2] Set state to idle
+[13669171] [2022-08-22 21:45:57] [INSTANCE-2] Set affinity to 5
+[13670609] [2022-08-22 21:45:59] [WALL_MAIN] Resetting instance 7 with ignoreLock = 1
+[13670609] [2022-08-22 21:45:59] [INSTANCE-7] Set state to resetting
+[13670609] [2022-08-22 21:45:59] [INSTANCE-7] Reset is valid with oldState = playing
+[13670609] [2022-08-22 21:45:59] [INSTANCE-7] Set affinity to 21
+[13670796] [2022-08-22 21:45:59] [INSTANCE-8] Set affinity to 12
+[13670796] [2022-08-22 21:45:59] [INSTANCE-4] Set affinity to 12
+[13670812] [2022-08-22 21:45:59] [INSTANCE-2] Set affinity to 12
+[13670843] [2022-08-22 21:45:59] [INSTANCE-9] Set affinity to 12
+[13671687] [2022-08-22 21:46:00] [WALL_MAIN] Playing instance 3
+[13671687] [2022-08-22 21:46:00] [INSTANCE-3] Set state to preparingToPlay
+[13671703] [2022-08-22 21:46:00] [INSTANCE-3] Set affinity to 24
+[13671718] [2022-08-22 21:46:00] [INSTANCE-9] Set affinity to 5
+[13671781] [2022-08-22 21:46:00] [INSTANCE-5] Set affinity to 5
+[13671781] [2022-08-22 21:46:00] [INSTANCE-1] Set affinity to 5
+[13671796] [2022-08-22 21:46:00] [INSTANCE-2] Set affinity to 5
+[13672187] [2022-08-22 21:46:00] [INSTANCE-3] Set state to playing
+[13674921] [2022-08-22 21:46:03] [INSTANCE-7] Set state to idle
+[13674937] [2022-08-22 21:46:03] [INSTANCE-7] Set affinity to 5
+[13676093] [2022-08-22 21:46:04] [WALL_MAIN] Resetting instance 3 with ignoreLock = 1
+[13676093] [2022-08-22 21:46:04] [INSTANCE-3] Set state to resetting
+[13676109] [2022-08-22 21:46:04] [INSTANCE-3] Reset is valid with oldState = playing
+[13676109] [2022-08-22 21:46:04] [INSTANCE-3] Set affinity to 21
+[13676296] [2022-08-22 21:46:04] [INSTANCE-2] Set affinity to 12
+[13676312] [2022-08-22 21:46:04] [INSTANCE-9] Set affinity to 12
+[13676359] [2022-08-22 21:46:04] [INSTANCE-7] Set affinity to 12
+[13676375] [2022-08-22 21:46:04] [INSTANCE-5] Set affinity to 12
+[13676375] [2022-08-22 21:46:04] [INSTANCE-1] Set affinity to 12
+[13677281] [2022-08-22 21:46:05] [WALL_MAIN] Playing instance 4
+[13677281] [2022-08-22 21:46:05] [INSTANCE-4] Set state to preparingToPlay
+[13677281] [2022-08-22 21:46:05] [INSTANCE-4] Set affinity to 24
+[13677296] [2022-08-22 21:46:05] [INSTANCE-6] Set affinity to 5
+[13677343] [2022-08-22 21:46:05] [INSTANCE-7] Set affinity to 5
+[13677359] [2022-08-22 21:46:05] [INSTANCE-1] Set affinity to 5
+[13677390] [2022-08-22 21:46:05] [INSTANCE-2] Set affinity to 5
+[13677625] [2022-08-22 21:46:06] [INSTANCE-4] Set state to playing
+[13680343] [2022-08-22 21:46:08] [INSTANCE-3] Set state to idle
+[13680359] [2022-08-22 21:46:08] [INSTANCE-3] Set affinity to 5
+[13680859] [2022-08-22 21:46:09] [WALL_MAIN] Resetting instance 4 with ignoreLock = 1
+[13680859] [2022-08-22 21:46:09] [INSTANCE-4] Set state to resetting
+[13680859] [2022-08-22 21:46:09] [INSTANCE-4] Reset is valid with oldState = playing
+[13680875] [2022-08-22 21:46:09] [INSTANCE-4] Set affinity to 21
+[13681062] [2022-08-22 21:46:09] [INSTANCE-7] Set affinity to 12
+[13681078] [2022-08-22 21:46:09] [INSTANCE-8] Set affinity to 12
+[13681078] [2022-08-22 21:46:09] [INSTANCE-1] Set affinity to 12
+[13681109] [2022-08-22 21:46:09] [INSTANCE-2] Set affinity to 12
+[13681125] [2022-08-22 21:46:09] [INSTANCE-9] Set affinity to 12
+[13681812] [2022-08-22 21:46:10] [WALL_MAIN] Playing instance 9
+[13681812] [2022-08-22 21:46:10] [INSTANCE-9] Set state to preparingToPlay
+[13681812] [2022-08-22 21:46:10] [INSTANCE-9] Set affinity to 24
+[13681828] [2022-08-22 21:46:10] [INSTANCE-7] Set affinity to 5
+[13681843] [2022-08-22 21:46:10] [INSTANCE-5] Set affinity to 5
+[13681875] [2022-08-22 21:46:10] [INSTANCE-2] Set affinity to 5
+[13681890] [2022-08-22 21:46:10] [INSTANCE-6] Set affinity to 5
+[13682171] [2022-08-22 21:46:10] [INSTANCE-9] Set state to playing
+[13685187] [2022-08-22 21:46:13] [INSTANCE-4] Set state to idle
+[13685203] [2022-08-22 21:46:13] [INSTANCE-4] Set affinity to 5
+[13685390] [2022-08-22 21:46:13] [WALL_MAIN] Resetting instance 9 with ignoreLock = 1
+[13685390] [2022-08-22 21:46:13] [INSTANCE-9] Set state to resetting
+[13685390] [2022-08-22 21:46:13] [INSTANCE-9] Reset is valid with oldState = playing
+[13685390] [2022-08-22 21:46:13] [INSTANCE-9] Set affinity to 21
+[13685593] [2022-08-22 21:46:14] [INSTANCE-2] Set affinity to 12
+[13685640] [2022-08-22 21:46:14] [INSTANCE-3] Set affinity to 12
+[13685656] [2022-08-22 21:46:14] [INSTANCE-7] Set affinity to 12
+[13685671] [2022-08-22 21:46:14] [INSTANCE-5] Set affinity to 12
+[13686234] [2022-08-22 21:46:14] [WALL_MAIN] Playing instance 1
+[13686234] [2022-08-22 21:46:14] [INSTANCE-1] Set state to preparingToPlay
+[13686234] [2022-08-22 21:46:14] [INSTANCE-1] Set affinity to 24
+[13686250] [2022-08-22 21:46:14] [INSTANCE-2] Set affinity to 5
+[13686296] [2022-08-22 21:46:14] [INSTANCE-4] Set affinity to 5
+[13686312] [2022-08-22 21:46:14] [INSTANCE-7] Set affinity to 5
+[13686328] [2022-08-22 21:46:14] [INSTANCE-5] Set affinity to 5
+[13686718] [2022-08-22 21:46:15] [INSTANCE-1] Set state to playing
+[13689062] [2022-08-22 21:46:17] [INSTANCE-9] Set state to idle
+[13689078] [2022-08-22 21:46:17] [INSTANCE-9] Set affinity to 5
+[13689453] [2022-08-22 21:46:17] [WALL_MAIN] Resetting instance 1 with ignoreLock = 1
+[13689453] [2022-08-22 21:46:17] [INSTANCE-1] Set state to resetting
+[13689453] [2022-08-22 21:46:17] [INSTANCE-1] Reset is valid with oldState = playing
+[13689468] [2022-08-22 21:46:17] [INSTANCE-1] Set affinity to 21
+[13689687] [2022-08-22 21:46:18] [INSTANCE-6] Set affinity to 12
+[13689718] [2022-08-22 21:46:18] [INSTANCE-7] Set affinity to 12
+[13689734] [2022-08-22 21:46:18] [INSTANCE-9] Set affinity to 12
+[13689750] [2022-08-22 21:46:18] [INSTANCE-2] Set affinity to 12
+[13690328] [2022-08-22 21:46:18] [WALL_MAIN] Playing instance 3
+[13690328] [2022-08-22 21:46:18] [INSTANCE-3] Set state to preparingToPlay
+[13690343] [2022-08-22 21:46:18] [INSTANCE-3] Set affinity to 24
+[13690375] [2022-08-22 21:46:18] [INSTANCE-5] Set affinity to 5
+[13690390] [2022-08-22 21:46:18] [INSTANCE-9] Set affinity to 5
+[13690406] [2022-08-22 21:46:18] [INSTANCE-2] Set affinity to 5
+[13690671] [2022-08-22 21:46:19] [INSTANCE-3] Set state to playing
+[13693765] [2022-08-22 21:46:22] [INSTANCE-1] Set state to idle
+[13693781] [2022-08-22 21:46:22] [INSTANCE-1] Set affinity to 5
+[13694343] [2022-08-22 21:46:22] [WALL_MAIN] Resetting instance 3 with ignoreLock = 1
+[13694343] [2022-08-22 21:46:22] [INSTANCE-3] Set state to resetting
+[13694359] [2022-08-22 21:46:22] [INSTANCE-3] Reset is valid with oldState = playing
+[13694359] [2022-08-22 21:46:22] [INSTANCE-3] Set affinity to 21
+[13694546] [2022-08-22 21:46:22] [INSTANCE-1] Set affinity to 12
+[13694562] [2022-08-22 21:46:22] [INSTANCE-2] Set affinity to 12
+[13694609] [2022-08-22 21:46:23] [INSTANCE-6] Set affinity to 12
+[13694640] [2022-08-22 21:46:23] [INSTANCE-5] Set affinity to 12
+[13695500] [2022-08-22 21:46:23] [WALL_MAIN] Playing instance 6
+[13695500] [2022-08-22 21:46:23] [INSTANCE-6] Set state to preparingToPlay
+[13695500] [2022-08-22 21:46:23] [INSTANCE-6] Set affinity to 24
+[13695515] [2022-08-22 21:46:23] [INSTANCE-8] Set affinity to 5
+[13695531] [2022-08-22 21:46:23] [INSTANCE-9] Set affinity to 5
+[13695546] [2022-08-22 21:46:23] [INSTANCE-2] Set affinity to 5
+[13695593] [2022-08-22 21:46:24] [INSTANCE-4] Set affinity to 5
+[13695968] [2022-08-22 21:46:24] [INSTANCE-6] Set state to playing
+[13698328] [2022-08-22 21:46:26] [INSTANCE-3] Set state to idle
+[13698343] [2022-08-22 21:46:26] [INSTANCE-3] Set affinity to 5
+[13699593] [2022-08-22 21:46:28] [WALL_MAIN] Resetting instance 6 with ignoreLock = 1
+[13699593] [2022-08-22 21:46:28] [INSTANCE-6] Set state to resetting
+[13699609] [2022-08-22 21:46:28] [INSTANCE-6] Reset is valid with oldState = playing
+[13699609] [2022-08-22 21:46:28] [INSTANCE-6] Set affinity to 21
+[13699796] [2022-08-22 21:46:28] [INSTANCE-1] Set affinity to 12
+[13699812] [2022-08-22 21:46:28] [INSTANCE-2] Set affinity to 12
+[13699859] [2022-08-22 21:46:28] [INSTANCE-4] Set affinity to 12
+[13699875] [2022-08-22 21:46:28] [INSTANCE-3] Set affinity to 12
+[13699890] [2022-08-22 21:46:28] [INSTANCE-8] Set affinity to 12
+[13700765] [2022-08-22 21:46:29] [WALL_MAIN] Playing instance 7
+[13700765] [2022-08-22 21:46:29] [INSTANCE-7] Set state to preparingToPlay
+[13700765] [2022-08-22 21:46:29] [INSTANCE-7] Set affinity to 24
+[13700796] [2022-08-22 21:46:29] [INSTANCE-2] Set affinity to 5
+[13700843] [2022-08-22 21:46:29] [INSTANCE-4] Set affinity to 5
+[13700859] [2022-08-22 21:46:29] [INSTANCE-3] Set affinity to 5
+[13700875] [2022-08-22 21:46:29] [INSTANCE-8] Set affinity to 5
+[13701250] [2022-08-22 21:46:29] [INSTANCE-7] Set state to playing
+[13703468] [2022-08-22 21:46:31] [INSTANCE-6] Set state to idle
+[13703484] [2022-08-22 21:46:31] [INSTANCE-6] Set affinity to 5
+[13705078] [2022-08-22 21:46:33] [WALL_MAIN] Resetting instance 7 with ignoreLock = 1
+[13705078] [2022-08-22 21:46:33] [INSTANCE-7] Set state to resetting
+[13705078] [2022-08-22 21:46:33] [INSTANCE-7] Reset is valid with oldState = playing
+[13705078] [2022-08-22 21:46:33] [INSTANCE-7] Set affinity to 21
+[13705281] [2022-08-22 21:46:33] [INSTANCE-2] Set affinity to 12
+[13705328] [2022-08-22 21:46:33] [INSTANCE-4] Set affinity to 12
+[13705343] [2022-08-22 21:46:33] [INSTANCE-6] Set affinity to 12
+[13705359] [2022-08-22 21:46:33] [INSTANCE-8] Set affinity to 12
+[13705375] [2022-08-22 21:46:33] [INSTANCE-9] Set affinity to 12
+[13706046] [2022-08-22 21:46:34] [WALL_MAIN] Playing instance 8
+[13706046] [2022-08-22 21:46:34] [INSTANCE-8] Set state to preparingToPlay
+[13706046] [2022-08-22 21:46:34] [INSTANCE-8] Set affinity to 24
+[13706093] [2022-08-22 21:46:34] [INSTANCE-4] Set affinity to 5
+[13706109] [2022-08-22 21:46:34] [INSTANCE-6] Set affinity to 5
+[13706125] [2022-08-22 21:46:34] [INSTANCE-3] Set affinity to 5
+[13706140] [2022-08-22 21:46:34] [INSTANCE-1] Set affinity to 5
+[13706156] [2022-08-22 21:46:34] [INSTANCE-2] Set affinity to 5
+[13706546] [2022-08-22 21:46:34] [INSTANCE-8] Set state to playing
+[13709296] [2022-08-22 21:46:37] [INSTANCE-7] Set state to idle
+[13709312] [2022-08-22 21:46:37] [INSTANCE-7] Set affinity to 5
+[13710171] [2022-08-22 21:46:38] [WALL_MAIN] Resetting instance 8 with ignoreLock = 1
+[13710171] [2022-08-22 21:46:38] [INSTANCE-8] Set state to resetting
+[13710187] [2022-08-22 21:46:38] [INSTANCE-8] Reset is valid with oldState = playing
+[13710187] [2022-08-22 21:46:38] [INSTANCE-8] Set affinity to 21
+[13710390] [2022-08-22 21:46:38] [INSTANCE-6] Set affinity to 12
+[13710406] [2022-08-22 21:46:38] [INSTANCE-9] Set affinity to 12
+[13710421] [2022-08-22 21:46:38] [INSTANCE-2] Set affinity to 12
+[13710468] [2022-08-22 21:46:38] [INSTANCE-4] Set affinity to 12
+[13711312] [2022-08-22 21:46:39] [WALL_MAIN] Playing instance 9
+[13711312] [2022-08-22 21:46:39] [INSTANCE-9] Set state to preparingToPlay
+[13711312] [2022-08-22 21:46:39] [INSTANCE-9] Set affinity to 24
+[13711343] [2022-08-22 21:46:39] [INSTANCE-4] Set affinity to 5
+[13711375] [2022-08-22 21:46:39] [INSTANCE-5] Set affinity to 5
+[13711390] [2022-08-22 21:46:39] [INSTANCE-1] Set affinity to 5
+[13711406] [2022-08-22 21:46:39] [INSTANCE-2] Set affinity to 5
+[13711640] [2022-08-22 21:46:40] [INSTANCE-9] Set state to playing
+[13714390] [2022-08-22 21:46:42] [INSTANCE-8] Set state to idle
+[13714406] [2022-08-22 21:46:42] [INSTANCE-8] Set affinity to 5
+[13714671] [2022-08-22 21:46:43] [WALL_MAIN] Resetting instance 9 with ignoreLock = 1
+[13714671] [2022-08-22 21:46:43] [INSTANCE-9] Set state to resetting
+[13714671] [2022-08-22 21:46:43] [INSTANCE-9] Reset is valid with oldState = playing
+[13714671] [2022-08-22 21:46:43] [INSTANCE-9] Set affinity to 21
+[13714875] [2022-08-22 21:46:43] [INSTANCE-5] Set affinity to 12
+[13714890] [2022-08-22 21:46:43] [INSTANCE-1] Set affinity to 12
+[13714906] [2022-08-22 21:46:43] [INSTANCE-2] Set affinity to 12
+[13714953] [2022-08-22 21:46:43] [INSTANCE-4] Set affinity to 12
+[13714953] [2022-08-22 21:46:43] [INSTANCE-8] Set affinity to 12
+[13715500] [2022-08-22 21:46:43] [WALL_MAIN] Playing instance 1
+[13715500] [2022-08-22 21:46:43] [INSTANCE-1] Set state to preparingToPlay
+[13715500] [2022-08-22 21:46:43] [INSTANCE-1] Set affinity to 24
+[13715531] [2022-08-22 21:46:43] [INSTANCE-6] Set affinity to 5
+[13715546] [2022-08-22 21:46:43] [INSTANCE-7] Set affinity to 5
+[13715562] [2022-08-22 21:46:43] [INSTANCE-2] Set affinity to 5
+[13715609] [2022-08-22 21:46:44] [INSTANCE-8] Set affinity to 5
+[13716015] [2022-08-22 21:46:44] [INSTANCE-1] Set state to playing
+[13718750] [2022-08-22 21:46:47] [INSTANCE-9] Set state to idle
+[13718765] [2022-08-22 21:46:47] [INSTANCE-9] Set affinity to 5
+[13719656] [2022-08-22 21:46:48] [WALL_MAIN] Resetting instance 1 with ignoreLock = 1
+[13719656] [2022-08-22 21:46:48] [INSTANCE-1] Set state to resetting
+[13719656] [2022-08-22 21:46:48] [INSTANCE-1] Reset is valid with oldState = playing
+[13719671] [2022-08-22 21:46:48] [INSTANCE-1] Set affinity to 21
+[13719843] [2022-08-22 21:46:48] [INSTANCE-2] Set affinity to 12
+[13719859] [2022-08-22 21:46:48] [INSTANCE-9] Set affinity to 12
+[13719875] [2022-08-22 21:46:48] [INSTANCE-4] Set affinity to 12
+[13719875] [2022-08-22 21:46:48] [INSTANCE-8] Set affinity to 12
+[13719906] [2022-08-22 21:46:48] [INSTANCE-5] Set affinity to 12
+[13719921] [2022-08-22 21:46:48] [INSTANCE-7] Set affinity to 12
+[13720593] [2022-08-22 21:46:49] [WALL_MAIN] Playing instance 3
+[13720593] [2022-08-22 21:46:49] [INSTANCE-3] Set state to preparingToPlay
+[13720593] [2022-08-22 21:46:49] [INSTANCE-3] Set affinity to 24
+[13720609] [2022-08-22 21:46:49] [INSTANCE-2] Set affinity to 5
+[13720625] [2022-08-22 21:46:49] [INSTANCE-9] Set affinity to 5
+[13720640] [2022-08-22 21:46:49] [INSTANCE-8] Set affinity to 5
+[13720671] [2022-08-22 21:46:49] [INSTANCE-6] Set affinity to 5
+[13720687] [2022-08-22 21:46:49] [INSTANCE-7] Set affinity to 5
+[13721062] [2022-08-22 21:46:49] [INSTANCE-3] Set state to playing
+[13724187] [2022-08-22 21:46:52] [INSTANCE-1] Set state to idle
+[13724203] [2022-08-22 21:46:52] [INSTANCE-1] Set affinity to 5
+[13724796] [2022-08-22 21:46:53] [WALL_MAIN] Resetting instance 3 with ignoreLock = 1
+[13724796] [2022-08-22 21:46:53] [INSTANCE-3] Set state to resetting
+[13724796] [2022-08-22 21:46:53] [INSTANCE-3] Reset is valid with oldState = playing
+[13724796] [2022-08-22 21:46:53] [INSTANCE-3] Set affinity to 21
+[13725015] [2022-08-22 21:46:53] [INSTANCE-4] Set affinity to 12
+[13725046] [2022-08-22 21:46:53] [INSTANCE-5] Set affinity to 12
+[13725062] [2022-08-22 21:46:53] [INSTANCE-7] Set affinity to 12
+[13725078] [2022-08-22 21:46:53] [INSTANCE-1] Set affinity to 12
+[13725093] [2022-08-22 21:46:53] [INSTANCE-2] Set affinity to 12
+[13725984] [2022-08-22 21:46:54] [WALL_MAIN] Playing instance 4
+[13725984] [2022-08-22 21:46:54] [INSTANCE-4] Set state to preparingToPlay
+[13725984] [2022-08-22 21:46:54] [INSTANCE-4] Set affinity to 24
+[13726000] [2022-08-22 21:46:54] [INSTANCE-8] Set affinity to 5
+[13726031] [2022-08-22 21:46:54] [INSTANCE-6] Set affinity to 5
+[13726046] [2022-08-22 21:46:54] [INSTANCE-7] Set affinity to 5
+[13726062] [2022-08-22 21:46:54] [INSTANCE-1] Set affinity to 5
+[13726093] [2022-08-22 21:46:54] [INSTANCE-2] Set affinity to 5
+[13726484] [2022-08-22 21:46:54] [INSTANCE-4] Set state to playing
+[13728781] [2022-08-22 21:46:57] [INSTANCE-3] Set state to idle
+[13728796] [2022-08-22 21:46:57] [INSTANCE-3] Set affinity to 5
+[13730531] [2022-08-22 21:46:58] [WALL_MAIN] Resetting instance 4 with ignoreLock = 1
+[13730531] [2022-08-22 21:46:58] [INSTANCE-4] Set state to resetting
+[13730531] [2022-08-22 21:46:58] [INSTANCE-4] Reset is valid with oldState = playing
+[13730546] [2022-08-22 21:46:58] [INSTANCE-4] Set affinity to 21
+[13730734] [2022-08-22 21:46:59] [INSTANCE-6] Set affinity to 12
+[13730750] [2022-08-22 21:46:59] [INSTANCE-7] Set affinity to 12
+[13730765] [2022-08-22 21:46:59] [INSTANCE-3] Set affinity to 12
+[13730796] [2022-08-22 21:46:59] [INSTANCE-2] Set affinity to 12
+[13730812] [2022-08-22 21:46:59] [INSTANCE-8] Set affinity to 12
+[13731609] [2022-08-22 21:47:00] [WALL_MAIN] Playing instance 7
+[13731609] [2022-08-22 21:47:00] [INSTANCE-7] Set state to preparingToPlay
+[13731609] [2022-08-22 21:47:00] [INSTANCE-7] Set affinity to 24
+[13731640] [2022-08-22 21:47:00] [INSTANCE-3] Set affinity to 5
+[13731671] [2022-08-22 21:47:00] [INSTANCE-2] Set affinity to 5
+[13731687] [2022-08-22 21:47:00] [INSTANCE-8] Set affinity to 5
+[13731718] [2022-08-22 21:47:00] [INSTANCE-5] Set affinity to 5
+[13731718] [2022-08-22 21:47:00] [INSTANCE-6] Set affinity to 5
+[13732078] [2022-08-22 21:47:00] [INSTANCE-7] Set state to playing
+[13734218] [2022-08-22 21:47:02] [INSTANCE-4] Set state to idle
+[13734234] [2022-08-22 21:47:02] [INSTANCE-4] Set affinity to 5
+[13735656] [2022-08-22 21:47:04] [WALL_MAIN] Resetting instance 7 with ignoreLock = 1
+[13735656] [2022-08-22 21:47:04] [INSTANCE-7] Set state to resetting
+[13735656] [2022-08-22 21:47:04] [INSTANCE-7] Reset is valid with oldState = playing
+[13735656] [2022-08-22 21:47:04] [INSTANCE-7] Set affinity to 21
+[13735843] [2022-08-22 21:47:04] [INSTANCE-8] Set affinity to 12
+[13735875] [2022-08-22 21:47:04] [INSTANCE-5] Set affinity to 12
+[13735906] [2022-08-22 21:47:04] [INSTANCE-1] Set affinity to 12
+[13735937] [2022-08-22 21:47:04] [INSTANCE-2] Set affinity to 12
+[13736656] [2022-08-22 21:47:05] [WALL_MAIN] Playing instance 9
+[13736656] [2022-08-22 21:47:05] [INSTANCE-9] Set state to preparingToPlay
+[13736656] [2022-08-22 21:47:05] [INSTANCE-9] Set affinity to 24
+[13736671] [2022-08-22 21:47:05] [INSTANCE-3] Set affinity to 5
+[13736703] [2022-08-22 21:47:05] [INSTANCE-2] Set affinity to 5
+[13736718] [2022-08-22 21:47:05] [INSTANCE-8] Set affinity to 5
+[13736750] [2022-08-22 21:47:05] [INSTANCE-4] Set affinity to 5
+[13737000] [2022-08-22 21:47:05] [INSTANCE-9] Set state to playing
+[13739734] [2022-08-22 21:47:08] [INSTANCE-7] Set state to idle
+[13739750] [2022-08-22 21:47:08] [INSTANCE-7] Set affinity to 5

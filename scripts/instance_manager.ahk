@@ -15,8 +15,6 @@ global MSG_UPDATE_PID := 0x0404
 
 global locked := False
 global state := "idle" ; possible states: idle, resetting, preparingToPlay, playing
-global bufferedAttempts := 0 ; buffer attempts if FileRead is unsuccessful
-global bufferedAttemptsSession := 0 ; buffer attempts for this session
 
 EnvGet, totalThreads, NUMBER_OF_PROCESSORS
 global currentThreads := totalThreads
@@ -149,37 +147,6 @@ HandleReset(ignoreLock) {
 
 		Sleep, %beforePauseDelay%
 		ControlSend, ahk_parent, {Blind}{Esc}, ahk_pid %PID%
-
-		if (countAttempts) { 
-			Critical, On
-			FileRead, attempts, %A_ScriptDir%\..\ATTEMPTS.txt
-			if (!ErrorLevel) {
-				attempts +=  1 + bufferedAttempts
-				bufferedAttempts := 0
-				FileDelete, %A_ScriptDir%\..\ATTEMPTS.txt
-				FileAppend, %attempts%, %A_ScriptDir%\..\ATTEMPTS.txt
-				SendLog(Format("Increased ATTEMPTS to {1}", attempts))
-			}
-			else {
-				SendLog("Could not read ATTEMPTS.txt")
-				bufferedAttempts++
-			}
-
-			FileRead, attemptsSession, %A_ScriptDir%\..\ATTEMPTS_SESSION.txt
-			if (!ErrorLevel) {
-				attemptsSession += 1 + bufferedAttemptsSession
-				bufferedAttemptsSession := 0
-				FileDelete, %A_ScriptDir%\..\ATTEMPTS_SESSION.txt
-				FileAppend, %attemptsSession%, %A_ScriptDir%\..\ATTEMPTS_SESSION.txt
-				SendLog(Format("Increased ATTEMPTS_SESSION to {1}", attemptsSession))
-			}
-			else {
-				SendLog("Could not read ATTEMPTS_SESSION.txt")
-				bufferedAttemptsSession++
-			}
-			Critical, Off
-		}
-
 		SetState("idle")
 	}
 	else {
@@ -206,6 +173,7 @@ HandlePlay() {
 	Critical, On
 	if (state == "idle") {
 		SetState("preparingToPlay")
+		locked := False
 		FileAppend, %instanceNumber%, A_ScriptDir\..\activeInstance.txt
 		Critical, Off
 
@@ -230,6 +198,10 @@ HandlePlay() {
 		}
 		WinActivate, ahk_id %windowID%
 		WinMinimize, Fullscreen Projector
+
+		middleOfScreenX := A_ScreenWidth/2 + 1
+		middleOfScreenY := A_ScreenHeight/2 + 1
+		MouseMove, middleOfScreenX, middleOfScreenY, 0
 
 		if (unpauseOnJoin) {
 			if (switchToEasy) {
@@ -270,16 +242,18 @@ SetState(newState) {
 }
 
 SetAffinity(threadCount) {
-	bitMask := GetBitMask(threadCount)
-	hProc := DllCall("OpenProcess", "UInt", 0x0200, "Int", false, "UInt", PID, "Ptr")
-	DllCall("SetProcessAffinityMask", "Ptr", hProc, "Ptr", bitMask)
-	DllCall("CloseHandle", "Ptr", hProc)
-	currentThreads := threadCount
-	SendLog(Format("Set affinity to {1}", threadCount))
+	if (affinity) {
+		bitMask := GetBitMask(threadCount)
+		hProc := DllCall("OpenProcess", "UInt", 0x0200, "Int", false, "UInt", PID, "Ptr")
+		DllCall("SetProcessAffinityMask", "Ptr", hProc, "Ptr", bitMask)
+		DllCall("CloseHandle", "Ptr", hProc)
+		currentThreads := threadCount
+		SendLog(Format("Set affinity to {1}", threadCount))
+	}
 }
 
 SendLog(message) {
 	if (logging) {
-		FileAppend, [%A_TickCount%] [%A_YYYY%-%A_MM%-%A_DD% %A_Hour%:%A_Min%:%A_Sec%] [INSTANCE-%instanceNumber%] %message%`n, %A_ScriptDir%\..\log.txt
+		FileAppend, [%A_TickCount%] [%A_YYYY%-%A_MM%-%A_DD% %A_Hour%:%A_Min%:%A_Sec%] [INSTANCE-%instanceNumber%] %message%`n, %A_ScriptDir%\..\log.log
 	}
 }

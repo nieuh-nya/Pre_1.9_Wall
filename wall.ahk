@@ -20,16 +20,8 @@ global windowIDs := []
 global PIDs := []
 global instanceManagerPIDs := []
 
-FileDelete, ATTEMPTS_SESSION.txt
 FileDelete, activeInstance.txt
 FileDelete, log*.txt
-
-if (countAttempts) {
-	FileAppend, 0, ATTEMPTS_SESSION.txt
-	if (!FileExist("ATTEMPTS.txt")) {
-		FileAppend, 0, ATTEMPTS.txt
-	}
-}
 
 SetupInstances()
 
@@ -138,7 +130,7 @@ MousePosToInstanceNumber() {
 
 SendLog(message) {
 	if (logging) {
-		FileAppend, [%A_TickCount%] [%A_YYYY%-%A_MM%-%A_DD% %A_Hour%:%A_Min%:%A_Sec%] [WALL_MAIN] %message%`n, %A_ScriptDir%\log.txt
+		FileAppend, [%A_TickCount%] [%A_YYYY%-%A_MM%-%A_DD% %A_Hour%:%A_Min%:%A_Sec%] [WALL_MAIN] %message%`n, %A_ScriptDir%\log.log
 	}
 }
 
