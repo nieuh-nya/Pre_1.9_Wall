@@ -11,10 +11,10 @@ SetWinDelay, 1
 global MSG_RESET := 0x0401
 global MSG_LOCK := 0x0402
 global MSG_PLAY := 0x0403
-global MSG_UPDATE_PID := 0x0404
 
 global locked := False
 global state := "idle" ; possible states: idle, resetting, preparingToPlay, playing
+global lastResetTime := A_TickCount
 
 EnvGet, totalThreads, NUMBER_OF_PROCESSORS
 global currentThreads := totalThreads
@@ -32,7 +32,6 @@ global PID := A_Args[3]
 OnMessage(MSG_RESET, "HandleReset")
 OnMessage(MSG_LOCK, "HandleLock")
 OnMessage(MSG_PLAY, "HandlePlay")
-OnMessage(MSG_UPDATE_PID, "HandleUpdatePID")
 
 SetupInstance()
 
@@ -109,6 +108,13 @@ HandleReset(ignoreLock) {
 			ControlSend, ahk_parent, {Blind}{Esc}, ahk_pid %PID%
 			Sleep, %guiDelay%
 		}
+		else {
+			now := A_TickCount
+			timeSinceLastReset := now - lastResetTime
+			if (timeSinceLastReset < guiDelay) {
+				Sleep, guiDelay - timeSinceLastReset
+			}
+		}
 
 		if (%resetSounds%) {
 			SoundPlay, A_ScriptDir\..\media\reset.wav
@@ -147,6 +153,7 @@ HandleReset(ignoreLock) {
 
 		Sleep, %beforePauseDelay%
 		ControlSend, ahk_parent, {Blind}{Esc}, ahk_pid %PID%
+		lastResetTime := A_TickCount
 		SetState("idle")
 	}
 	else {
@@ -179,6 +186,14 @@ HandlePlay() {
 
 		SetAffinity(playThreads)
 
+		if (wideResets) {
+			WinMaximize, ahk_id %windowID%
+		}
+		WinActivate, ahk_id %windowID%
+		WinMinimize, Fullscreen Projector
+
+		MouseMove, A_ScreenWidth/2 + 1, A_ScreenHeight/2 + 1, 0
+
 		if (switchToEasy) {
 			ControlSend, ahk_parent, {Blind}{Tab 3}, ahk_pid %PID%
 			Sleep, %settingsDelay%
@@ -192,16 +207,6 @@ HandlePlay() {
 			Sleep, %settingsDelay%
 			ControlSend, ahk_parent, {Blind}{Enter}, ahk_pid %PID%
 		}
-
-		if (wideResets) {
-			WinMaximize, ahk_id %windowID%
-		}
-		WinActivate, ahk_id %windowID%
-		WinMinimize, Fullscreen Projector
-
-		middleOfScreenX := A_ScreenWidth/2 + 1
-		middleOfScreenY := A_ScreenHeight/2 + 1
-		MouseMove, middleOfScreenX, middleOfScreenY, 0
 
 		if (unpauseOnJoin) {
 			if (switchToEasy) {
@@ -230,12 +235,6 @@ HandlePlay() {
 	}
 }
 
-HandleUpdatePID(newPID) {
-	PID := newPID
-	WinGet, windowID, ID, ahk_pid %PID%
-	SetupInstance()
-}
-
 SetState(newState) {
 	state := newState
 	SendLog(Format("Set state to {1}", state))
@@ -254,6 +253,6 @@ SetAffinity(threadCount) {
 
 SendLog(message) {
 	if (logging) {
-		FileAppend, [%A_TickCount%] [%A_YYYY%-%A_MM%-%A_DD% %A_Hour%:%A_Min%:%A_Sec%] [INSTANCE-%instanceNumber%] %message%`n, %A_ScriptDir%\..\log.log
+		FileAppend, [%A_TickCount%] [%A_YYYY%-%A_MM%-%A_DD% %A_Hour%:%A_Min%:%A_Sec%] %message%`n, %A_ScriptDir%\..\logs\log_instance_%instanceNumber%.log
 	}
 }

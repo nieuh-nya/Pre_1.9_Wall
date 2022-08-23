@@ -10,18 +10,19 @@ SetTitleMatchMode, 1
 global MSG_RESET := 0x0401
 global MSG_LOCK := 0x0402
 global MSG_PLAY := 0x0403
-global MSG_UPDATE_PID := 0x0404
 
 global instanceWidth := Floor(A_ScreenWidth / columns)
 global instanceHeight := Floor(A_ScreenHeight / rows)
 global totalInstances := 0
 
-global windowIDs := []
 global PIDs := []
 global instanceManagerPIDs := []
 
+if (!FileExist("logs")) {
+	FileCreateDir, logs
+}
 FileDelete, activeInstance.txt
-FileDelete, log*.txt
+FileDelete, logs\log*.log
 
 SetupInstances()
 
@@ -43,28 +44,15 @@ SetupInstances() {
 			SendLog(Format("instanceNumber.txt not found for PID = {1} and windowID = {2}", PID, windowID))
 			ExitApp
 		}
-		else if (PID == PIDs[instanceNumber] && windowID == windowIDs[instanceNumber]) {
-			SendLog(Format("Instance {1} is already managed correctly with PID = {2} and windowID = {3}", instanceNumber, PID, windowID))
-			continue
-		}
 		else {
-			windowIDs[instanceNumber] := windowID
 			PIDs[instanceNumber] := PID
 			SendLog(Format("Found instance {1} with PID = {2} and windowID = {3}", instanceNumber, PID, windowID))
-			if (instanceManagerPID := instanceManagerPIDs[instanceNumber]) {
-				DetectHiddenWindows, On
-				PostMessage, MSG_UPDATE_PID, PID,,, ahk_pid %instanceManagerPID%
-				DetectHiddenWindows, Off
-				SendLog(Format("Sent MSG_UPDATE_PID to instanceManagerPID {1}", instanceManagerPID))
-			}
-			else {
-				Run, "%A_ScriptDir%\scripts\instance_manager.ahk" %instanceNumber% %windowID% %PID%,,, instanceManagerPID
-				DetectHiddenWindows, On
-				WinWait, ahk_pid %instanceManagerPID%
-				DetectHiddenWindows, Off
-				instanceManagerPIDs[instanceNumber] := instanceManagerPID
-				SendLog(Format("Started new instance manager with PID {1}", instanceManagerPID))
-			}
+			Run, "%A_ScriptDir%\scripts\instance_manager.ahk" %instanceNumber% %windowID% %PID%,,, instanceManagerPID
+			DetectHiddenWindows, On
+			WinWait, ahk_pid %instanceManagerPID%
+			DetectHiddenWindows, Off
+			instanceManagerPIDs[instanceNumber] := instanceManagerPID
+			SendLog(Format("Started new instance manager with PID {1}", instanceManagerPID))
 		}
 	}
 	totalInstances := PIDs.MaxIndex()
@@ -130,7 +118,7 @@ MousePosToInstanceNumber() {
 
 SendLog(message) {
 	if (logging) {
-		FileAppend, [%A_TickCount%] [%A_YYYY%-%A_MM%-%A_DD% %A_Hour%:%A_Min%:%A_Sec%] [WALL_MAIN] %message%`n, %A_ScriptDir%\log.log
+		FileAppend, [%A_TickCount%] [%A_YYYY%-%A_MM%-%A_DD% %A_Hour%:%A_Min%:%A_Sec%] %message%`n, %A_ScriptDir%\logs\log.log
 	}
 }
 

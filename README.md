@@ -1,16 +1,16 @@
-Mostly copy/pasted from Specnr and FinestPigeon
+Credits to Specnr for the original wall and FinestPigeon for the first Pre 1.9 version
 
-How to setup:
+READ THIS BEFORE DOWNLOADING:
 
-- put instanceNumber.txt in your .minecrafts
-- press F3+P on all of your instances so they don't automatically pause after losing focus
-- window titles are different from macros for other versions, so configure your OBS scenes accordingly
-- you can use "Window title must match", so you don't have to reload scenes
-- uses Numpad + instanceNumber to switch to scenes by default
-- F12 for Wall-Scene by default
+- You will probably have to change your delays
+- For 1.7: guiDelay will likely have to be at least 800ms
+- Don't reset right after unpausing, it will not work (only way to fix this would be a huge delay for every reset)
+- When playing, you can only reset while unpaused
+- When on wall, you can only reset while paused or on the title screen
+- Make sure you don't have spaces in the file paths to your instances
+- You need instanceNumber.txt in your .minecrafts
+- Press F3+P on all of your instances so they don't automatically pause after losing focus
+- Window titles are different from macros for other versions, so configure your OBS scenes accordingly
+- You can use "Window title must match", so you don't have to reload scenes
 
-General things:
-
-- NO SPACES IN YOUR FILE PATHS
-- YOU WILL PROBABLY HAVE TO CHANGE DELAYS, increasing settingsDelay and guiDelay will most likely help if the macro is fucking up (1.7 needs higher guiDelay)
-- don't reset right after unpausing, it will not work (only way to fix this would be a huge delay for every reset)
+If you have done all of these and still have issues, message me (nieuh#8609)

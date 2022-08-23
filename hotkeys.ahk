@@ -7,7 +7,6 @@
 	*F::FocusReset(MousePosToInstanceNumber()) ; play one instance, reset the others
 	*T::ResetAll() ; reset all instances
 	+LButton::LockInstance(MousePosToInstanceNumber()) ; lock an instance
-	*L::SetupInstances() ; reload after an instance crashed
 
 	; reset keys (1-9)
 	*1::ResetInstance(1, True)
