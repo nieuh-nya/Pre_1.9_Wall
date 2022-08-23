@@ -1,72 +1,31 @@
 #IfWinActive, Minecraft
-  {
-    *U:: ExitWorld() ; Reset
-  }
-return
+	*U:: ResetInstance(GetActiveInstanceNumber(), True) ; reset while playing
 
 #IfWinActive, Fullscreen Projector
-  {
-    *E::ResetInstance(MousePosToInstNumber())
-    *R::SwitchInstance(MousePosToInstNumber())
-    *F::FocusReset(MousePosToInstNumber())
-    *T::ResetAll()
-    +LButton::LockInstance(MousePosToInstNumber())
+	*E::ResetInstance(MousePosToInstanceNumber(), True) ; reset an instance on wall
+	*R::PlayInstance(MousePosToInstanceNumber()) ; play an instance
+	*F::FocusReset(MousePosToInstanceNumber()) ; play one instance, reset the others
+	*T::ResetAll() ; reset all instances
+	+LButton::LockInstance(MousePosToInstanceNumber()) ; lock an instance
 
-    ; Reset keys (1-9)
-    *1::
-      ResetInstance(1)
-    return
-    *2::
-      ResetInstance(2)
-    return
-    *3::
-      ResetInstance(3)
-    return
-    *4::
-      ResetInstance(4)
-    return
-    *5::
-      ResetInstance(5)
-    return
-    *6::
-      ResetInstance(6)
-    return
-    *7::
-      ResetInstance(7)
-    return
-    *8::
-      ResetInstance(8)
-    return
-    *9::
-      ResetInstance(9)
-    return
+	; reset keys (1-9)
+	*1::ResetInstance(1, True)
+	*2::ResetInstance(2, True)
+	*3::ResetInstance(3, True)
+	*4::ResetInstance(4, True)
+	*5::ResetInstance(5, True)
+	*6::ResetInstance(6, True)
+	*7::ResetInstance(7, True)
+	*8::ResetInstance(8, True)
+	*9::ResetInstance(9, True)
 
-    ; Switch to instance keys (Shift + 1-9)
-    *+1::
-      SwitchInstance(1)
-    return
-    *+2::
-      SwitchInstance(2)
-    return
-    *+3::
-      SwitchInstance(3)
-    return
-    *+4::
-      SwitchInstance(4)
-    return
-    *+5::
-      SwitchInstance(5)
-    return
-    *+6::
-      SwitchInstance(6)
-    return
-    *+7::
-      SwitchInstance(7)
-    return
-    *+8::
-      SwitchInstance(8)
-    return
-    *+9::
-      SwitchInstance(9)
-    return
-  }
+	; play instance keys (shift + 1-9)
+	*+1::PlayInstance(1)
+	*+2::PlayInstance(2)
+	*+3::PlayInstance(3)
+	*+4::PlayInstance(4)
+	*+5::PlayInstance(5)
+	*+6::PlayInstance(6)
+	*+7::PlayInstance(7)
+	*+8::PlayInstance(8)
+	*+9::PlayInstance(9)
