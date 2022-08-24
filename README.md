@@ -9,7 +9,7 @@ READ THIS BEFORE DOWNLOADING:
 - When on wall, you can only reset while paused or on the title screen
 - Make sure you don't have spaces in the file paths to your instances
 - You need instanceNumber.txt in your .minecrafts
-- Press F3+P on all of your instances so they don't automatically pause after losing focus
+- Set pauseOnLostFocus to false in your options.txt/standardoptions.txt
 - Window titles are different from macros for other versions, so configure your OBS scenes accordingly
 - You can use "Window title must match", so you don't have to reload scenes
 
