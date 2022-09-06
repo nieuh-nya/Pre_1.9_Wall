@@ -11,6 +11,7 @@ global wideResets := True ; stretches your instances when resetting for better v
 global widthMultiplier := 2.5 ; how wide you want your instances to be
 global resetSounds := True ; whether reset.wav plays whenever you reset
 global lockSounds := True ; whether lock.wav plays whenever you lock an instance
+global audioGui := True ; gui to capture ahk audio
 global loadingScreenColor := 0x2E2117 ; color of the top left pixel of the loading screen, only change if you're using a texture pack
 global obsSceneControlType := "N" ; N = numpad hotkeys (up to 9 instances), F = function hotkeys f13-f24 (up to 12 instances), C = custom key array (too many instances)
 global obsWallSceneKey := "F12" ; hotkey to switch to your wall scene

@@ -24,6 +24,11 @@ if (!FileExist("logs")) {
 FileDelete, activeInstance.txt
 FileDelete, logs\log*.log
 
+if (audioGui) {
+	Gui, New
+	Gui, Show,, Wall Audio
+}
+
 SetupInstances()
 
 SetupInstances() {
