@@ -10,6 +10,7 @@ READ THIS BEFORE DOWNLOADING:
 - Make sure you don't have spaces in the file paths to your instances
 - You need instanceNumber.txt in your .minecrafts
 - Set pauseOnLostFocus to false in your options.txt/standardoptions.txt
+- Click on your instances once after starting them (so that they aren't orange in the taskbar, fixes mouse glitching)
 - Window titles are different from macros for other versions, so configure your OBS scenes accordingly
 - You can use "Window title must match", so you don't have to reload scenes
 
