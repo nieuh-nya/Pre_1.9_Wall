@@ -1,7 +1,7 @@
 #IfWinActive, Minecraft
 	*U:: ResetInstance(GetActiveInstanceNumber(), True) ; reset while playing
 
-#IfWinActive, Fullscreen Projector
+#IfWinActive, screen Projector
 	*E::ResetInstance(MousePosToInstanceNumber(), True) ; reset an instance on wall
 	*R::PlayInstance(MousePosToInstanceNumber()) ; play an instance
 	*F::FocusReset(MousePosToInstanceNumber()) ; play one instance, reset the others

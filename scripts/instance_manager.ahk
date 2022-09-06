@@ -7,6 +7,7 @@
 
 SetKeyDelay, 0
 SetWinDelay, 1
+SetTitleMatchMode, 2
 
 global MSG_RESET := 0x0401
 global MSG_LOCK := 0x0402
@@ -100,7 +101,7 @@ HandleReset(ignoreLock) {
 			if (wideResets) {
 				MakeWindowWide(windowID, widthMultiplier)
 			}
-			WinActivate, Fullscreen Projector
+			WinActivate, screen Projector
 			Send, {%obsWallSceneKey% down}
 			Sleep, %obsDelay%
 			Send, {%obsWallSceneKey% up}
@@ -190,7 +191,7 @@ HandlePlay() {
 			WinMaximize, ahk_id %windowID%
 		}
 		WinActivate, ahk_id %windowID%
-		WinMinimize, Fullscreen Projector
+		WinMinimize, screen Projector
 
 		MouseMove, A_ScreenWidth/2 + 1, A_ScreenHeight/2 + 1, 0
 

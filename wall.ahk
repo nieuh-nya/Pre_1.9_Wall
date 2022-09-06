@@ -5,7 +5,7 @@
 
 SetKeyDelay, 0
 SetWinDelay, 1
-SetTitleMatchMode, 1
+SetTitleMatchMode, 2
 
 global MSG_RESET := 0x0401
 global MSG_LOCK := 0x0402
