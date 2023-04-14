@@ -29,14 +29,6 @@ GetInstanceNumber(minecraftDirectory) {
 	return instanceNumber
 }
 
-GetActiveInstanceNumber() {
-	FileRead, activeInstanceNumber, activeInstance.txt
-	if (ErrorLevel) {
-		return 0
-	}
-	return activeInstanceNumber
-}
-
 MakeWindowWide(windowID, widthMultiplier) {
 	newHeight := Floor(A_ScreenHeight / widthMultiplier)
 	WinRestore, ahk_id %windowID%

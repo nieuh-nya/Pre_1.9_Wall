@@ -9,183 +9,228 @@ SetKeyDelay, 0
 SetWinDelay, 1
 SetTitleMatchMode, 2
 
-global MSG_RESET := 0x0401
-global MSG_LOCK := 0x0402
-global MSG_PLAY := 0x0403
+global instanceNumber := A_Args[1]
+global windowID := A_Args[2]
+global PID := A_Args[3]
+global mainScriptPID := A_Args[4]
 
-global locked := False
-global state := "idle" ; possible states: idle, resetting, preparingToPlay, playing
-global lastResetTime := A_TickCount
+global MSG_RESET := 0x1001
+global MSG_LOCK := 0x1002
+global MSG_PLAY := 0x1003
+global MSG_CHANGED_ACTIVE_INSTANCE := 0x1004
+global MSG_STARTED_PLAYING := 0x1005
+global MSG_STOPPED_PLAYING := 0x1006
+OnMessage(MSG_RESET, "HandleReset")
+OnMessage(MSG_LOCK, "HandleLock")
+OnMessage(MSG_PLAY, "HandlePlay")
+OnMessage(MSG_CHANGED_ACTIVE_INSTANCE, "HandleChangedActiveInstance")
 
 EnvGet, totalThreads, NUMBER_OF_PROCESSORS
 global currentThreads := totalThreads
 global playThreads := playThreadsOverride > 0 ? playThreadsOverride : totalThreads
-global highThreads := highThreadsOverride > 0 ? highThreadsOverride : Max(Floor(totalThreads * 0.9), totalThreads - 4)
-global lockThreads := lockThreadsOverride > 0 ? lockThreadsOverride : highThreads
-global midThreads := midThreadsOverride > 0 ? midThreadsOverride : Ceil(totalThreads * 0.7)
-global lowThreads := lowThreadsOverride > 0 ? lowThreadsOverride : Ceil(totalThreads * 0.5)
-global superLowThreads := superLowThreadsOverride > 0 ? superLowThreadsOverride : Ceil(totalThreads * 0.2)
+global resettingThreads := resettingThreadsOverride > 0 ? resettingThreadsOverride : totalThreads
+global resettingBackgroundThreads := resettingBackgroundThreadsOverride > 0 ? resettingBackgroundThreadsOverride : Ceil(totalThreads * 0.66)
+global idleThreads := idleThreadsOverride > 0 ? idleThreadsOverride : Ceil(totalThreads * 0.5)
+global idleBackgroundThreads := idleBackgroundThreadsOverride > 0 ? idleBackgroundThreadsOverride : Ceil(totalThreads * 0.33)
+global lockedThreads := idleThreads
+global lockedBackgroundThreads := idleBackgroundThreads
 
-global instanceNumber := A_Args[1]
-global windowID := A_Args[2]
-global PID := A_Args[3]
-
-OnMessage(MSG_RESET, "HandleReset")
-OnMessage(MSG_LOCK, "HandleLock")
-OnMessage(MSG_PLAY, "HandlePlay")
-
-SetupInstance()
-
-while (affinity) {
-	Sleep, %affinityCheckDelay%
-
-	if (state == "idle") {
-		Critical, On
-		newThreads := 0
-		if (GetActiveInstanceNumber()) {
-			newThreads := superLowThreads
-		}
-		else if (locked) {
-			newThreads := lockThreads
-		}
-		else {
-			newThreads := lowThreads
-		}
-		if (newThreads != currentThreads) {
-			SetAffinity(newThreads)
-		}
-		Critical, Off
-	}
+RegExMatch(version, "\d\.(\d+)\.\d", Match)
+global subVersion := Match1 + 0
+global ahkControl := "ahk_parent"
+if (subVersion == 3) {
+	ahkControl := "LWJGL1"
 }
 
-SetupInstance() {
-	WinSetTitle, ahk_id %windowID%, , Minecraft %version% - Instance %instanceNumber%
-	WinRestore, ahk_id %windowID%
-	if (borderless) {
-		WinSet, Style, -0xC00000, ahk_id %windowID%
-		WinSet, Style, -0x40000, ahk_id %windowID%
-		WinSet, ExStyle, -0x00000200, ahk_id %windowID%
-	}
-	if (wideResets) {
-		MakeWindowWide(windowID, widthMultiplier)
-	}
-	else {
-		WinMaximize, ahk_id %windowID%
-	}
-	SetState("idle")
-	SendLog("Done setting up instance")
+global locked := False
+global oldState := "idle"
+global state := "idle" ; possible states: idle, resetting, preparingToPlay, playing
+global stateOutFile := GetMinecraftDirectory(PID) . "wpstateout.txt" ; for 1.3
+global lastPauseTime := 0
+global activeInstanceNumber := 0
+global tabPresses := 1
+if (subVersion == 8) {
+	tabPresses = 7
 }
+
+thisPID := DllCall("GetCurrentProcessId")
+SendLog(Format("This instanceManager's PID is {1}", thisPID))
+
+WinSetTitle, ahk_id %windowID%, , Minecraft %version% - Instance %instanceNumber%
+WinRestore, ahk_id %windowID%
+if (borderless) {
+	WinSet, Style, -0xC00000, ahk_id %windowID%
+	WinSet, Style, -0x40000, ahk_id %windowID%
+	WinSet, ExStyle, -0x00000200, ahk_id %windowID%
+}
+if (wideResets) {
+	MakeWindowWide(windowID, widthMultiplier)
+}
+else {
+	WinMaximize, ahk_id %windowID%
+}
+SetState("idle")
+SendLog("Done setting up instance")
 
 HandleReset(ignoreLock) {
+	SendLog("Received MSG_RESET")
 	Critical, On
 	if (locked && !ignoreLock) {
 		SendLog("Not resetting because instance is locked")
 		return
 	}
 	else if (state == "idle" || state == "playing") {
-		oldState := state
 		SetState("resetting")
-		locked := false
+		locked := False
 		Critical, Off
-
 		SendLog(Format("Reset is valid with oldState = {1}", oldState))
-		activeInstanceNumber := GetActiveInstanceNumber()
-		if (activeInstanceNumber && activeInstanceNumber != instanceNumber) {
-			SetAffinity(lowThreads)
-		}
-		else {
-			SetAffinity(highThreads)
-		}
 
 		if (oldState == "playing") {
+			if (!useAtumHotkey) {
+				SendLog("Switching to pause menu")
+				ControlSend, %ahkControl%, {Blind}{Esc}, ahk_pid %PID%
+			}
+			if (affinity) {
+				SendLog("Sending MSG_STOPPED_PLAYING")
+				activeInstanceNumber := 0
+				DetectHiddenWindows, On
+				PostMessage, MSG_STOPPED_PLAYING, instanceNumber,,, ahk_pid %mainScriptPID%
+				DetectHiddenWindows, Off
+			}
 			if (wideResets) {
 				MakeWindowWide(windowID, widthMultiplier)
 			}
-			WinActivate, screen Projector
 			Send, {%obsWallSceneKey% down}
 			Sleep, %obsDelay%
 			Send, {%obsWallSceneKey% up}
-			FileDelete, %A_ScriptDir%\..\activeInstance.txt
-			ControlSend, ahk_parent, {Blind}{Esc}, ahk_pid %PID%
-			Sleep, %guiDelay%
+			WinActivate, screen Projector
+		}
+
+		if (resetSounds) {
+			SoundPlay, %A_ScriptDir%\..\media\reset.wav
+		}
+
+		if (useAtumHotkey) {
+			SendLog(Format("Sending atumHotkey = {1}", atumHotkey))
+			ControlSend, %ahkControl%, {Blind}{%atumHotkey% down}, ahk_pid %PID%
+			Sleep, %resetDownDelay%
+			ControlSend, %ahkControl%, {Blind}{%atumHotkey% up}, ahk_pid %PID%
 		}
 		else {
-			now := A_TickCount
-			timeSinceLastReset := now - lastResetTime
-			if (timeSinceLastReset < guiDelay) {
-				Sleep, guiDelay - timeSinceLastReset
+			; guarantee that guiDelay has passed before resetting
+			if (A_TickCount - lastPauseTime < guiDelay) {
+				timeToSleep := guiDelay - (A_TickCount - lastPauseTime)
+				SendLog(Format("Waiting an extra {1}ms", timeToSleep))
+				Sleep, %timeToSleep%
 			}
+			SendLog(Format("Sending reset inputs with Tab x {1}", tabPresses))
+			ControlSend, %ahkControl%, {Blind}{Tab %tabPresses%}, ahk_pid %PID%
+			Sleep, %settingsDelay%
+			ControlSend, %ahkControl%, {Blind}{Enter}, ahk_pid %PID%
 		}
 
-		if (%resetSounds%) {
-			SoundPlay, A_ScriptDir\..\media\reset.wav
-		}
-		TabPresses := 7 ; magically works for everything
-
-		ControlSend, ahk_parent, {Blind}{Tab %TabPresses%}, ahk_pid %PID%
-		Sleep, %settingsDelay%
-		ControlSend, ahk_parent, {Blind}{Enter}, ahk_pid %PID%
-
-		; check for loading screen
-		while (True) {
-			if (GetTopLeftPixelColor(windowID) == loadingScreenColor) {
-				break
+		if (subVersion == 3) {
+			; wait until out of current world
+			SendLog(Format("stateOutFile = {1}", stateOutFile))
+			while (True) {
+				FileRead, stateOut, %stateOutFile%
+				SendLog(Format("Read line: {1}", stateOut))
+				if (InStr(stateOut, "waiting") || InStr(stateOut, "generating")) {
+					break
+				}
+				Sleep, %stateOutReadDelay%
 			}
-			Sleep, %pixelCheckDelay%
-		}
-		Sleep, %worldLoadDelay%
-
-		; check for world load
-		while (True) {
-			if (GetTopLeftPixelColor(windowID) != loadingScreenColor) {
-				break
+			Sleep, %worldLoadDelay%
+			
+			; wait until in next world
+			while (True) {
+				FileRead, stateOut, %stateOutFile%
+				SendLog(Format("Read line: {1}", stateOut))
+				if (InStr(stateOut, "inworld")) {
+					break
+				}
+				Sleep, %stateOutReadDelay%
 			}
-			Sleep, %pixelCheckDelay%
 		}
-		Sleep, %titleScreenFlashDelay%
-
-		; second check for world load in case title screen flashed
-		while (True) {
-			if (GetTopLeftPixelColor(windowID) != loadingScreenColor) {
-				break
+		else {
+			; check for loading screen
+			while (True) {
+				color := GetTopLeftPixelColor(windowID)
+				SendLog(Format("Got pixel : {1}", color))
+				if (color == loadingScreenColor) {
+					break
+				}
+				Sleep, %pixelCheckDelay%
 			}
-			Sleep, %pixelCheckDelay%
+			Sleep, %worldLoadDelay%
+	
+			; check for world load
+			while (True) {
+				color := GetTopLeftPixelColor(windowID)
+				SendLog(Format("Got pixel : {1}", color))
+				if (color != loadingScreenColor) {
+					break
+				}
+				Sleep, %pixelCheckDelay%
+			}
+			Sleep, %titleScreenFlashDelay%
+		
+			; second check for world load in case title screen flashed
+			while (True) {
+				color := GetTopLeftPixelColor(windowID)
+				SendLog(Format("Got pixel : {1}", color))
+				if (color != loadingScreenColor) {
+					break
+				}
+				Sleep, %pixelCheckDelay%
+			}
 		}
 
 		Sleep, %beforePauseDelay%
-		ControlSend, ahk_parent, {Blind}{Esc}, ahk_pid %PID%
-		lastResetTime := A_TickCount
+		ControlSend, %ahkControl%, {Blind}{Esc}, ahk_pid %PID%
 		SetState("idle")
+		lastPauseTime := A_TickCount
+		SendLog(Format("Paused at {1}", lastPauseTime))
 	}
 	else {
+		Critical, Off
 		SendLog(Format("Not resetting because state = {1}", state))
 	}
 }
 
 HandleLock() {
+	SendLog("Received MSG_LOCK")
 	Critical, On
 	if (state == "idle") {
 		locked := True
 		Critical, Off
+		HandleAffinity()
 		if (lockSounds) {
-			SoundPlay, A_ScriptDir\..\media\lock.wav
+			SoundPlay, %A_ScriptDir%\..\media\lock.wav
 		}
 		SendLog("Done locking")
 	}
 	else {
+		Critical, Off
 		SendLog(Format("Not locking because state = {1}", state))
 	}
 }
 
 HandlePlay() {
+	SendLog("Received MSG_PLAY")
 	Critical, On
 	if (state == "idle") {
 		SetState("preparingToPlay")
 		locked := False
-		FileAppend, %instanceNumber%, A_ScriptDir\..\activeInstance.txt
 		Critical, Off
 
-		SetAffinity(playThreads)
+		if (affinity) {
+			SendLog("Sending MSG_STARTED_PLAYING")
+			activeInstanceNumber := instanceNumber
+			DetectHiddenWindows, On
+			PostMessage, MSG_STARTED_PLAYING, instanceNumber,,, ahk_pid %mainScriptPID%
+			DetectHiddenWindows, Off
+		}
 
 		if (wideResets) {
 			WinMaximize, ahk_id %windowID%
@@ -193,27 +238,32 @@ HandlePlay() {
 		WinActivate, ahk_id %windowID%
 		WinMinimize, screen Projector
 
-		MouseMove, A_ScreenWidth/2 + 1, A_ScreenHeight/2 + 1, 0
+		MouseMove, A_ScreenWidth/2 + 1, A_ScreenHeight/2 + 1, 0 ; Removes cursor twitching
 
-		if (switchToEasy) {
-			ControlSend, ahk_parent, {Blind}{Tab 3}, ahk_pid %PID%
+		if (switchToEasy && subVersion >= 8) {
+			SendLog("Switching to easy")
+			ControlSend, %ahkControl%, {Blind}{Tab 3}, ahk_pid %PID%
 			Sleep, %settingsDelay%
-			ControlSend, ahk_parent, {Blind}{Enter}, ahk_pid %PID%
+			ControlSend, %ahkControl%, {Blind}{Enter}, ahk_pid %PID%
 			Sleep %guiDelay%
-			ControlSend, ahk_parent, {Blind}{Tab 2}, ahk_pid %PID%
+			ControlSend, %ahkControl%, {Blind}{Tab 2}, ahk_pid %PID%
 			Sleep, %settingsDelay%
-			ControlSend, ahk_parent, {Blind}{Enter 3}, ahk_pid %PID%
+			ControlSend, %ahkControl%, {Blind}{Enter 3}, ahk_pid %PID%
 			Sleep %settingsDelay%
-			ControlSend, ahk_parent, {Blind}{Tab 12}, ahk_pid %PID%
+			tabsToDone := 12
+			if (subVersion >= 10) {
+				tabsToDone := 10
+			}
+			ControlSend, %ahkControl%, {Blind}{Tab %tabsToDone%}, ahk_pid %PID%
 			Sleep, %settingsDelay%
-			ControlSend, ahk_parent, {Blind}{Enter}, ahk_pid %PID%
+			ControlSend, %ahkControl%, {Blind}{Enter}, ahk_pid %PID%
 		}
 
 		if (unpauseOnJoin) {
 			if (switchToEasy) {
 				Sleep, %guiDelay%
 			}
-			ControlSend, ahk_parent, {Blind}{Esc}, ahk_pid %PID%
+			ControlSend, %ahkControl%, {Blind}{Esc}, ahk_pid %PID%
 		}
 
 		if (obsSceneControlType == "N") {
@@ -236,9 +286,55 @@ HandlePlay() {
 	}
 }
 
+HandleChangedActiveInstance(newActiveInstanceNumber) {
+	SendLog(Format("Received MSG_CHANGED_ACTIVE_INSTANCE with newActiveInstanceNumber = {1}", newActiveInstanceNumber))
+	activeInstanceNumber := newActiveInstanceNumber
+	HandleAffinity()
+}
+
 SetState(newState) {
+	oldState := state
 	state := newState
 	SendLog(Format("Set state to {1}", state))
+	HandleAffinity()
+}
+
+HandleAffinity() {
+	if (affinity) {
+		isBackgroundInstance := activeInstanceNumber > 0
+
+		if (state == "preparingToPlay" || state == "playing") {
+			newThreads := playThreads
+		}
+		else if (locked) {
+			if (isBackgroundInstance) {
+				newThreads := lockedBackgroundThreads
+			}
+			else {
+				newThreads := lockedThreads
+			}
+		}
+		else if (state == "resetting") {
+			if (isBackgroundInstance) {
+				newThreads := resettingBackgroundThreads
+			}
+			else {
+				newThreads := resettingThreads
+			}
+		}
+		else if (state == "idle") {
+			if (isBackgroundInstance) {
+				newThreads := idleBackgroundThreads
+			}
+			else {
+				newThreads := idleThreads
+			}
+		}
+
+		if (newThreads != currentThreads) {
+			SetAffinity(newThreads)
+		}
+	}
 }
 
 SetAffinity(threadCount) {

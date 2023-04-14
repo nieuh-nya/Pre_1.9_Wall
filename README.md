@@ -4,14 +4,17 @@ READ THIS BEFORE DOWNLOADING:
 
 - You will probably have to change your delays
 - For 1.7: guiDelay will likely have to be at least 800ms
-- Don't reset right after unpausing, it will not work (only way to fix this would be a huge delay for every reset)
-- When playing, you can only reset while unpaused
-- When on wall, you can only reset while paused or on the title screen
 - Make sure you don't have spaces in the file paths to your instances
 - You need instanceNumber.txt in your .minecrafts
 - Set pauseOnLostFocus to false in your options.txt/standardoptions.txt
 - Click on your instances once after starting them (so that they aren't orange in the taskbar, fixes mouse glitching)
-- Window titles are different from macros for other versions, so configure your OBS scenes accordingly
 - You can use "Window title must match", so you don't have to reload scenes
+- Your AHK needs to be V1.1
+
+Mod Requirements:
+- TabFocus (all versions)
+- Atum (all versions, recommend a version with working hotkey)
+- Stater (1.3)
+- No Paus (1.3)
 
 If you have done all of these and still have issues, message me (nieuh#8609)
