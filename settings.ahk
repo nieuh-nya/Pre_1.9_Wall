@@ -4,8 +4,7 @@ global rows := 3 ; number of rows on the wall scene
 global columns := 3 ; number of columns on the wall scene
 global useAtumHotkey := True ; whether to send the atumHotkey or manually tab through the menu
 global atumHotkey := "F6" ; your "Create New World" key as bound in controls
-global logging := False ; please keep this on so I might be able to help you with issues
-
+global logging := True ; don't need this unless you're having issues
 ; Extra features
 global disableTTS := False ; disables the "Ready" when running the macro
 global borderless := True ; automatically makes your instances borderless
