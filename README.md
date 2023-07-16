@@ -12,9 +12,10 @@ READ THIS BEFORE DOWNLOADING:
 - Your AHK needs to be V1.1
 
 Mod Requirements:
-- TabFocus (all versions)
-- Atum (all versions, recommend a version with working hotkey)
-- Stater (1.3)
-- No Paus (1.3)
+- [TabFocus](https://github.com/RedLime/TabFocus/releases/latest) (all versions)
+- [Atum](https://modrinth.com/mod/atum/versions#all-versions) (all versions, recommend a version with working hotkey)
+- 1.3 only:
+  - [State Output](https://github.com/tildejustin/state-output/releases/latest)
+  - [No Paus](https://github.com/tildejustin/no-paus)
 
 If you have done all of these and still have issues, message me (nieuh#8609)
